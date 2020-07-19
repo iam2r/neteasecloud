@@ -13,7 +13,7 @@ export default class App extends tsx<any> {
                 <div id="pages-box">
                     <ScrollView class="pages-scroll-view" scopedSlots={{
                         default: () =>
-                            <transition name="fade">
+                            <transition name={this.$state.transitions.pages}>
                                 <div class="page-box-container" key={this.$route.name}>
                                     <router-view />
                                 </div>

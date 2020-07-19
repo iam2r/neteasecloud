@@ -6,16 +6,14 @@ import "./style.scss";
 @Component
 export default class Footer extends tsx<any> {
     private list: { key: Pages, value: string }[] = [{ key: Pages.Home, value: '发现' }, { key: Pages.Mine, value: '我的' }];
-    private active: number = 0;
 
-
-    private get currentPage(): Pages {
-        return this.list[this.active].key
+    private get active(): number {
+        const active = this.list.findIndex(it => it.key == this.$route.name);
+        return ~active ? active : 0;
     }
 
-    @Watch("active")
-    protected onActiveChange() {
-        this.$router.replace({ name: this.currentPage })
+    private set active(active: number) {
+        this.$router.replace({ name: this.list[active].key })
     }
 
     protected render() {
