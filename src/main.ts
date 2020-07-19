@@ -1,7 +1,7 @@
 import "minireset.css";
 import "normalize.css";
 import "swiper/css/swiper.css";
-import "./_adapter.scss";
+import "@/styles/_adapter.scss";
 import "./state";
 import Vue from 'vue'
 import router from './router';

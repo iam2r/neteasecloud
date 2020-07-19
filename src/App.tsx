@@ -4,7 +4,7 @@ import { PortalTarget } from "portal-vue";
 import ScrollView from "@/common/components/scrollview";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import "./app.scss";
+import "@/styles/app.scss";
 @Component
 export default class App extends tsx<any> {
     protected render() {
