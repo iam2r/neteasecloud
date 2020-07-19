@@ -1,0 +1,50 @@
+@import "~@/_var.scss";
+#app{
+    height: 100%;
+    #pages-box{
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: $headerHeight;
+        bottom: 0;
+        .pages-scroll-view{
+            >.swiper-scrollbar{
+                height: calc(98% - #{$footerHeight});
+            }
+            .page-box-container{
+                &.fade-enter-active{
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                }
+            }
+        }
+        
+    }
+    #fixed-box{
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        pointer-events: none;
+        z-index: 10;
+        >*{
+            pointer-events: auto;
+        }
+    }
+}
+
+
+
+
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .3s;
+}

@@ -1,0 +1,26 @@
+@import "~@/_var.scss";
+.footer-component{
+    width: 100%;
+    height: $footerHeight;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: rgba(27, 27, 28, .8);
+    .footer-navs{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        .tabs-item{
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            &.active{
+                color: red;
+            }
+        }
+    }
+
+}
