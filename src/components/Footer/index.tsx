@@ -3,6 +3,7 @@ import { Component, Watch } from "vue-property-decorator";
 import Tabs from "@/common/components/tabs";
 import { Pages } from "@/router";
 import "./style.scss";
+import FontIcons from '@/common/components/fonticons';
 @Component
 export default class Footer extends tsx<any> {
     private list: { key: Pages, value: string }[] = [{ key: Pages.Home, value: '发现' }, { key: Pages.Mine, value: '我的' }];
@@ -16,13 +17,18 @@ export default class Footer extends tsx<any> {
         this.$router.replace({ name: this.list[active].key })
     }
 
+
+
+
     protected render() {
         return (
             <div class="footer-component">
                 <Tabs class="footer-navs" v-model={this.active} length={this.list.length} scopedSlots={{
-                    default: (i) => <span> {this.list[i].value}</span>
-
-
+                    default: (i) =>
+                        <div>
+                            <FontIcons value={this.list[i].key} />
+                            <span> {this.list[i].value}</span>
+                        </div>
                 }} />
             </div>
         )

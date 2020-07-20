@@ -27,14 +27,15 @@ export default class Tabs extends tsx<TabsProps, any, TabsSlots> {
     return (
       <ul class="tabs-wrapper">
         {Array.from({ length: this.length }).map((item, i) => (
-          <li
+          <v-touch
+            tag="li"
             class={["tabs-item", this.active == i ? "active" : ""]}
-            onClick={() => {
+            onTap={() => {
               this.toggleIndex(i);
             }}
           >
             {this.$scopedSlots.default(i)}
-          </li>
+          </v-touch>
         ))}
       </ul>
     );
