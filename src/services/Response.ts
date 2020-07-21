@@ -4,6 +4,6 @@ export class ResponseSearchAdvice extends IResponse {
     data: {
         showKeyword: string,
         realkeyword: string,
-        action?:number
+        action?:number,
     }
 }

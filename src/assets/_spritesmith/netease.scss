@@ -1,0 +1,240 @@
+// SCSS variables are information about icon's compiled state, stored under its original file name
+//
+// .icon-home {
+//   width: $icon-home-width;
+// }
+//
+// The large array-like variables contain all information about a single icon
+// $icon-home: x y offset_x offset_y width height total_width total_height image_path;
+//
+// At the bottom of this section, we provide information about the spritesheet itself
+// $spritesheet: width height image $spritesheet-sprites;
+$sprite-cm2-icn-back-2x-name: 'sprite_cm2_icn_back@2x';
+$sprite-cm2-icn-back-2x-x: 384px;
+$sprite-cm2-icn-back-2x-y: 53px;
+$sprite-cm2-icn-back-2x-offset-x: -384px;
+$sprite-cm2-icn-back-2x-offset-y: -53px;
+$sprite-cm2-icn-back-2x-width: 50px;
+$sprite-cm2-icn-back-2x-height: 50px;
+$sprite-cm2-icn-back-2x-total-width: 436px;
+$sprite-cm2-icn-back-2x-total-height: 383px;
+$sprite-cm2-icn-back-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm2-icn-back-2x: (384px, 53px, -384px, -53px, 50px, 50px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm2_icn_back@2x', );
+$sprite-cm2-list-icn-search-2x-name: 'sprite_cm2_list_icn_search@2x';
+$sprite-cm2-list-icn-search-2x-x: 384px;
+$sprite-cm2-list-icn-search-2x-y: 104px;
+$sprite-cm2-list-icn-search-2x-offset-x: -384px;
+$sprite-cm2-list-icn-search-2x-offset-y: -104px;
+$sprite-cm2-list-icn-search-2x-width: 24px;
+$sprite-cm2-list-icn-search-2x-height: 24px;
+$sprite-cm2-list-icn-search-2x-total-width: 436px;
+$sprite-cm2-list-icn-search-2x-total-height: 383px;
+$sprite-cm2-list-icn-search-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm2-list-icn-search-2x: (384px, 104px, -384px, -104px, 24px, 24px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm2_list_icn_search@2x', );
+$sprite-cm4-btm-icn-account-2x-name: 'sprite_cm4_btm_icn_account@2x';
+$sprite-cm4-btm-icn-account-2x-x: 285px;
+$sprite-cm4-btm-icn-account-2x-y: 198px;
+$sprite-cm4-btm-icn-account-2x-offset-x: -285px;
+$sprite-cm4-btm-icn-account-2x-offset-y: -198px;
+$sprite-cm4-btm-icn-account-2x-width: 52px;
+$sprite-cm4-btm-icn-account-2x-height: 52px;
+$sprite-cm4-btm-icn-account-2x-total-width: 436px;
+$sprite-cm4-btm-icn-account-2x-total-height: 383px;
+$sprite-cm4-btm-icn-account-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm4-btm-icn-account-2x: (285px, 198px, -285px, -198px, 52px, 52px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm4_btm_icn_account@2x', );
+$sprite-cm4-btm-icn-discovery-2x-name: 'sprite_cm4_btm_icn_discovery@2x';
+$sprite-cm4-btm-icn-discovery-2x-x: 384px;
+$sprite-cm4-btm-icn-discovery-2x-y: 0px;
+$sprite-cm4-btm-icn-discovery-2x-offset-x: -384px;
+$sprite-cm4-btm-icn-discovery-2x-offset-y: 0px;
+$sprite-cm4-btm-icn-discovery-2x-width: 52px;
+$sprite-cm4-btm-icn-discovery-2x-height: 52px;
+$sprite-cm4-btm-icn-discovery-2x-total-width: 436px;
+$sprite-cm4-btm-icn-discovery-2x-total-height: 383px;
+$sprite-cm4-btm-icn-discovery-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm4-btm-icn-discovery-2x: (384px, 0px, -384px, 0px, 52px, 52px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm4_btm_icn_discovery@2x', );
+$sprite-cm2-fm-btn-cmt-number-2x-name: 'sprite_cm2_fm_btn_cmt_number@2x';
+$sprite-cm2-fm-btn-cmt-number-2x-x: 137px;
+$sprite-cm2-fm-btn-cmt-number-2x-y: 148px;
+$sprite-cm2-fm-btn-cmt-number-2x-offset-x: -137px;
+$sprite-cm2-fm-btn-cmt-number-2x-offset-y: -148px;
+$sprite-cm2-fm-btn-cmt-number-2x-width: 98px;
+$sprite-cm2-fm-btn-cmt-number-2x-height: 98px;
+$sprite-cm2-fm-btn-cmt-number-2x-total-width: 436px;
+$sprite-cm2-fm-btn-cmt-number-2x-total-height: 383px;
+$sprite-cm2-fm-btn-cmt-number-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm2-fm-btn-cmt-number-2x: (137px, 148px, -137px, -148px, 98px, 98px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm2_fm_btn_cmt_number@2x', );
+$sprite-cm2-fm-btn-love-2x-name: 'sprite_cm2_fm_btn_love@2x';
+$sprite-cm2-fm-btn-love-2x-x: 285px;
+$sprite-cm2-fm-btn-love-2x-y: 0px;
+$sprite-cm2-fm-btn-love-2x-offset-x: -285px;
+$sprite-cm2-fm-btn-love-2x-offset-y: 0px;
+$sprite-cm2-fm-btn-love-2x-width: 98px;
+$sprite-cm2-fm-btn-love-2x-height: 98px;
+$sprite-cm2-fm-btn-love-2x-total-width: 436px;
+$sprite-cm2-fm-btn-love-2x-total-height: 383px;
+$sprite-cm2-fm-btn-love-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm2-fm-btn-love-2x: (285px, 0px, -285px, 0px, 98px, 98px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm2_fm_btn_love@2x', );
+$sprite-cm2-fm-btn-loved-2x-name: 'sprite_cm2_fm_btn_loved@2x';
+$sprite-cm2-fm-btn-loved-2x-x: 285px;
+$sprite-cm2-fm-btn-loved-2x-y: 99px;
+$sprite-cm2-fm-btn-loved-2x-offset-x: -285px;
+$sprite-cm2-fm-btn-loved-2x-offset-y: -99px;
+$sprite-cm2-fm-btn-loved-2x-width: 98px;
+$sprite-cm2-fm-btn-loved-2x-height: 98px;
+$sprite-cm2-fm-btn-loved-2x-total-width: 436px;
+$sprite-cm2-fm-btn-loved-2x-total-height: 383px;
+$sprite-cm2-fm-btn-loved-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm2-fm-btn-loved-2x: (285px, 99px, -285px, -99px, 98px, 98px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm2_fm_btn_loved@2x', );
+$sprite-cm2-fm-btn-next-dis-3x-name: 'sprite_cm2_fm_btn_next_dis@3x';
+$sprite-cm2-fm-btn-next-dis-3x-x: 0px;
+$sprite-cm2-fm-btn-next-dis-3x-y: 0px;
+$sprite-cm2-fm-btn-next-dis-3x-offset-x: 0px;
+$sprite-cm2-fm-btn-next-dis-3x-offset-y: 0px;
+$sprite-cm2-fm-btn-next-dis-3x-width: 147px;
+$sprite-cm2-fm-btn-next-dis-3x-height: 147px;
+$sprite-cm2-fm-btn-next-dis-3x-total-width: 436px;
+$sprite-cm2-fm-btn-next-dis-3x-total-height: 383px;
+$sprite-cm2-fm-btn-next-dis-3x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm2-fm-btn-next-dis-3x: (0px, 0px, 0px, 0px, 147px, 147px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm2_fm_btn_next_dis@3x', );
+$sprite-cm2-fm-btn-next-2x-name: 'sprite_cm2_fm_btn_next@2x';
+$sprite-cm2-fm-btn-next-2x-x: 0px;
+$sprite-cm2-fm-btn-next-2x-y: 285px;
+$sprite-cm2-fm-btn-next-2x-offset-x: 0px;
+$sprite-cm2-fm-btn-next-2x-offset-y: -285px;
+$sprite-cm2-fm-btn-next-2x-width: 98px;
+$sprite-cm2-fm-btn-next-2x-height: 98px;
+$sprite-cm2-fm-btn-next-2x-total-width: 436px;
+$sprite-cm2-fm-btn-next-2x-total-height: 383px;
+$sprite-cm2-fm-btn-next-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm2-fm-btn-next-2x: (0px, 285px, 0px, -285px, 98px, 98px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm2_fm_btn_next@2x', );
+$sprite-cm2-fm-btn-pause-2x-name: 'sprite_cm2_fm_btn_pause@2x';
+$sprite-cm2-fm-btn-pause-2x-x: 148px;
+$sprite-cm2-fm-btn-pause-2x-y: 0px;
+$sprite-cm2-fm-btn-pause-2x-offset-x: -148px;
+$sprite-cm2-fm-btn-pause-2x-offset-y: 0px;
+$sprite-cm2-fm-btn-pause-2x-width: 136px;
+$sprite-cm2-fm-btn-pause-2x-height: 136px;
+$sprite-cm2-fm-btn-pause-2x-total-width: 436px;
+$sprite-cm2-fm-btn-pause-2x-total-height: 383px;
+$sprite-cm2-fm-btn-pause-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm2-fm-btn-pause-2x: (148px, 0px, -148px, 0px, 136px, 136px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm2_fm_btn_pause@2x', );
+$sprite-cm2-fm-btn-play-2x-name: 'sprite_cm2_fm_btn_play@2x';
+$sprite-cm2-fm-btn-play-2x-x: 0px;
+$sprite-cm2-fm-btn-play-2x-y: 148px;
+$sprite-cm2-fm-btn-play-2x-offset-x: 0px;
+$sprite-cm2-fm-btn-play-2x-offset-y: -148px;
+$sprite-cm2-fm-btn-play-2x-width: 136px;
+$sprite-cm2-fm-btn-play-2x-height: 136px;
+$sprite-cm2-fm-btn-play-2x-total-width: 436px;
+$sprite-cm2-fm-btn-play-2x-total-height: 383px;
+$sprite-cm2-fm-btn-play-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm2-fm-btn-play-2x: (0px, 148px, 0px, -148px, 136px, 136px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm2_fm_btn_play@2x', );
+$sprite-cm2-icn-loop-2x-name: 'sprite_cm2_icn_loop@2x';
+$sprite-cm2-icn-loop-2x-x: 99px;
+$sprite-cm2-icn-loop-2x-y: 285px;
+$sprite-cm2-icn-loop-2x-offset-x: -99px;
+$sprite-cm2-icn-loop-2x-offset-y: -285px;
+$sprite-cm2-icn-loop-2x-width: 88px;
+$sprite-cm2-icn-loop-2x-height: 88px;
+$sprite-cm2-icn-loop-2x-total-width: 436px;
+$sprite-cm2-icn-loop-2x-total-height: 383px;
+$sprite-cm2-icn-loop-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm2-icn-loop-2x: (99px, 285px, -99px, -285px, 88px, 88px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm2_icn_loop@2x', );
+$sprite-cm2-icn-one-2x-name: 'sprite_cm2_icn_one@2x';
+$sprite-cm2-icn-one-2x-x: 188px;
+$sprite-cm2-icn-one-2x-y: 285px;
+$sprite-cm2-icn-one-2x-offset-x: -188px;
+$sprite-cm2-icn-one-2x-offset-y: -285px;
+$sprite-cm2-icn-one-2x-width: 88px;
+$sprite-cm2-icn-one-2x-height: 88px;
+$sprite-cm2-icn-one-2x-total-width: 436px;
+$sprite-cm2-icn-one-2x-total-height: 383px;
+$sprite-cm2-icn-one-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm2-icn-one-2x: (188px, 285px, -188px, -285px, 88px, 88px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm2_icn_one@2x', );
+$sprite-cm2-icn-shuffle-2x-name: 'sprite_cm2_icn_shuffle@2x';
+$sprite-cm2-icn-shuffle-2x-x: 277px;
+$sprite-cm2-icn-shuffle-2x-y: 285px;
+$sprite-cm2-icn-shuffle-2x-offset-x: -277px;
+$sprite-cm2-icn-shuffle-2x-offset-y: -285px;
+$sprite-cm2-icn-shuffle-2x-width: 88px;
+$sprite-cm2-icn-shuffle-2x-height: 88px;
+$sprite-cm2-icn-shuffle-2x-total-width: 436px;
+$sprite-cm2-icn-shuffle-2x-total-height: 383px;
+$sprite-cm2-icn-shuffle-2x-image: '~@/assets/_spritesmith/netease.png';
+$sprite-cm2-icn-shuffle-2x: (277px, 285px, -277px, -285px, 88px, 88px, 436px, 383px, '~@/assets/_spritesmith/netease.png', 'sprite_cm2_icn_shuffle@2x', );
+$netease-spritesheet-width: 436px;
+$netease-spritesheet-height: 383px;
+$netease-spritesheet-image: '~@/assets/_spritesmith/netease.png';
+$netease-spritesheet-sprites: ($sprite-cm2-icn-back-2x, $sprite-cm2-list-icn-search-2x, $sprite-cm4-btm-icn-account-2x, $sprite-cm4-btm-icn-discovery-2x, $sprite-cm2-fm-btn-cmt-number-2x, $sprite-cm2-fm-btn-love-2x, $sprite-cm2-fm-btn-loved-2x, $sprite-cm2-fm-btn-next-dis-3x, $sprite-cm2-fm-btn-next-2x, $sprite-cm2-fm-btn-pause-2x, $sprite-cm2-fm-btn-play-2x, $sprite-cm2-icn-loop-2x, $sprite-cm2-icn-one-2x, $sprite-cm2-icn-shuffle-2x, );
+$netease-spritesheet: (436px, 383px, '~@/assets/_spritesmith/netease.png', $netease-spritesheet-sprites, );
+
+// The provided mixins are intended to be used with the array-like variables
+//
+// .icon-home {
+//   @include sprite-width($icon-home);
+// }
+//
+// .icon-email {
+//   @include sprite($icon-email);
+// }
+//
+// Example usage in HTML:
+//
+// `display: block` sprite:
+// <div class="icon-home"></div>
+//
+// To change `display` (e.g. `display: inline-block;`), we suggest using a common CSS class:
+//
+// // CSS
+// .icon {
+//   display: inline-block;
+// }
+//
+// // HTML
+// <i class="icon icon-home"></i>
+@mixin sprite-width($sprite) {
+  width: nth($sprite, 5);
+}
+
+@mixin sprite-height($sprite) {
+  height: nth($sprite, 6);
+}
+
+@mixin sprite-position($sprite) {
+  $sprite-offset-x: nth($sprite, 3);
+  $sprite-offset-y: nth($sprite, 4);
+  background-position: $sprite-offset-x  $sprite-offset-y;
+}
+
+@mixin sprite-size($sprite) {
+  $sprite-size-x: nth($sprite, 7);
+  $sprite-size-y: nth($sprite, 8);
+  background-size: $sprite-size-x  $sprite-size-y;
+}
+
+@mixin sprite-image($sprite) {
+  $sprite-image: nth($sprite, 9);
+  background-image: url(#{$sprite-image});
+}
+
+@mixin sprite($sprite) {
+  @include sprite-image($sprite);
+  @include sprite-position($sprite);
+  @include sprite-width($sprite);
+  @include sprite-height($sprite);
+  @include sprite-size($sprite);
+}
+
+// The `sprites` mixin generates identical output to the CSS template
+//   but can be overridden inside of SCSS
+//
+// @include sprites($spritesheet-sprites);
+@mixin sprites($sprites) {
+  @each $sprite in $sprites {
+    $sprite-name: nth($sprite, 10);
+    .#{$sprite-name} {
+      @include sprite($sprite);
+    }
+  }
+}

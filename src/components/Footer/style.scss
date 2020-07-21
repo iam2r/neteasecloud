@@ -19,14 +19,45 @@
             color: #707070;
             font-size: 20px;
             transition: color 0.3s;
-            >div{
+            .footer-nav-item{
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                svg{
-                    font-size: 35px;
-                    margin-bottom: 8px;
+                .icon-box-container{
+                    width: 52px;
+                    height: 52px;
+                    position: relative;
+                    margin-bottom: 6px;
+                }
+                .icon-box{
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 52px;
+                    height: 52px;
+                    border-radius: 50%;
+                    z-index: 0;
+                    >i{
+                        &.icon-home{
+                            @include sprite($sprite-cm4-btm-icn-discovery-2x)
+                        }
+
+                        &.icon-mine{
+                            @include sprite($sprite-cm4-btm-icn-account-2x)
+                        }
+                    }
+
+                    &[data-status='on']{
+                        background: linear-gradient(to right, #ff5639 0%,#ff5b3c 25%,#ff5639 50%,#ff5b3c 100%);
+                        z-index: 1;
+                        >i{
+                            transform: scale(0.7);
+                        }
+                    }
                 }
             }
             &.active{

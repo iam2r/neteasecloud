@@ -19,5 +19,5 @@ export default class NetEaseServices extends Services {
     public search(req: ResquestSearch, callback?: (err: IError, res: IResponse) => void): Promise<IResponse> {
         return this.send<ResquestSearch, IResponse>(Commond.Search, req, callback)
     }
-
+ 
 }

@@ -24,9 +24,16 @@ export default class Footer extends tsx<any> {
         return (
             <div class="footer-component">
                 <Tabs class="footer-navs" v-model={this.active} length={this.list.length} scopedSlots={{
-                    default: (i) =>
-                        <div>
-                            <FontIcons value={this.list[i].key} />
+                    default: ({ i, isActive }) =>
+                        <div class="footer-nav-item">
+                            <div class="icon-box-container">
+                                <transition name="scale">
+                                    <div key={isActive ? 'on' : 'off'} class="icon-box" data-status={isActive ? 'on' : 'off'}>
+                                        <i class={'icon-' + this.list[i].key}></i>
+                                    </div>
+                                </transition>
+                            </div>
+
                             <span> {this.list[i].value}</span>
                         </div>
                 }} />

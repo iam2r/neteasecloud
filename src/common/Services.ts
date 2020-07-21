@@ -1,6 +1,6 @@
 import EventEmitter from '@/common/EventEmitter';
 import axios, { AxiosResponse } from "axios";
-
+axios.defaults.withCredentials = true;
 
 export class IRequest {
     timestamp: number
@@ -28,12 +28,12 @@ export default class Service extends EventEmitter {
         axios.defaults.timeout = this.timeout;
     }
 
-    protected send<Request extends IRequest, Response extends IResponse>(command: string, request?: Request, callback?: (err: IError, res: Response) => void): Promise<Response> {
+    protected send<Request extends IRequest, Response extends IResponse>(command: string, request?: Request, callback?: (err: IError, res: Response) => void, ): Promise<Response> {
         request.timestamp = +new Date();
         console.log(`ajax Request: ${command} ` + JSON.stringify(request));
         return new Promise(async (resolve, reject) => {
             let error: IError = null, response: Response = null;
-            const queryPromise: Promise<AxiosResponse<Response>> = axios.post(this.url + "/" + command, request, { withCredentials: true });
+            const queryPromise: Promise<AxiosResponse<Response>> = axios.post(this.url + "/" + command, request);
             queryPromise.catch((err: any) => {
                 console.error(err.message);
                 error = { command, err };

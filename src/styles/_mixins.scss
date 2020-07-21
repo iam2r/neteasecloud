@@ -296,7 +296,8 @@
   }
 }
 
-@mixin sprite-size($sprite, $design-width, $design-height) {
+
+@mixin sprite-scale($sprite, $design-width, $design-height) {
   $x: $design-width / nth($sprite, 5);
   $y: $design-height / nth($sprite, 6);
   $sprite-image: nth($sprite, 9);
@@ -307,7 +308,7 @@
   background-size: nth($sprite, 7) * $x nth($sprite, 8) * $y;
 }
 
-@mixin sprites-size($sprites, $design-width, $design-height) {
+@mixin sprites-scale($sprites, $design-width, $design-height) {
   @each $sprite in $sprites {
     $sprite-name: nth($sprite, 10);
 

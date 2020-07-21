@@ -7,7 +7,7 @@ export interface TabsProps {
 }
 
 export interface TabsSlots {
-  default?: number;
+  default?: { i: number, isActive: boolean };
 }
 
 @Component
@@ -28,13 +28,14 @@ export default class Tabs extends tsx<TabsProps, any, TabsSlots> {
       <ul class="tabs-wrapper">
         {Array.from({ length: this.length }).map((item, i) => (
           <v-touch
+            key={i}
             tag="li"
             class={["tabs-item", this.active == i ? "active" : ""]}
             onTap={() => {
               this.toggleIndex(i);
             }}
           >
-            {this.$scopedSlots.default(i)}
+            {this.$scopedSlots.default({ i, isActive: this.active == i })}
           </v-touch>
         ))}
       </ul>
