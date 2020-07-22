@@ -26,6 +26,8 @@
     "vue-tsx-support": "^2.3.3"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.7.0",
+    "@typescript-eslint/parser": "^3.7.0",
     "@vue/cli-plugin-babel": "^4.4.0",
     "@vue/cli-plugin-router": "^4.4.0",
     "@vue/cli-plugin-typescript": "^4.4.0",
