@@ -30,12 +30,33 @@
     "@vue/cli-plugin-router": "^4.4.0",
     "@vue/cli-plugin-typescript": "^4.4.0",
     "@vue/cli-service": "^4.4.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-typescript": "^5.0.2",
     "babel-plugin-component": "1.1.1",
+    "eslint": "^7.5.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-vue": "^6.2.2",
+    "lint-staged": "^10.2.11",
     "postcss-px2rem-exclude": "^0.0.6",
+    "prettier": "^2.0.5",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "typescript": "~3.9.3",
     "vue-template-compiler": "^2.6.11",
-    "webpack-spritesmith": "^1.1.0"
+    "webpack-spritesmith": "^1.1.0",
+    "yorkie": "^2.0.0"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.{vue,js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,css,less,scss,vue,js,jsx,ts,tsx}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
