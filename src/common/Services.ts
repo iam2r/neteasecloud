@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 axios.defaults.withCredentials = true;
 
 export class IRequest {
-    timestamp: number
+    // timestamp: number
 }
 
 export class IResponse {
@@ -29,11 +29,10 @@ export default class Service extends EventEmitter {
     }
 
     protected send<Request extends IRequest, Response extends IResponse>(command: string, request?: Request, callback?: (err: IError, res: Response) => void, ): Promise<Response> {
-        request.timestamp = +new Date();
         console.log(`ajax Request: ${command} ` + JSON.stringify(request));
         return new Promise(async (resolve, reject) => {
             let error: IError = null, response: Response = null;
-            const queryPromise: Promise<AxiosResponse<Response>> = axios.post(this.url + "/" + command, request);
+            const queryPromise: Promise<AxiosResponse<Response>> = axios.post(this.url + "/" + command + '?' + require('qs').stringify({ timestamp: +new Date() }), request);
             queryPromise.catch((err: any) => {
                 console.error(err.message);
                 error = { command, err };

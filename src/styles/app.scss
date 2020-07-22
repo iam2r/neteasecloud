@@ -1,11 +1,13 @@
+
+
+
 #app{
     height: 100%;
+  
+    padding-top: $headerHeight;
     #pages-box{
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: $headerHeight;
-        bottom: 0;
+        height: 100%;
+        background: yellow;
         .pages-scroll-view{
             >.swiper-scrollbar{
                 height: calc(98% - #{$footerHeight});

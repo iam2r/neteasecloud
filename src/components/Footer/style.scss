@@ -56,6 +56,13 @@
                         z-index: 1;
                         >i{
                             transform: scale(0.7);
+                            &.icon-home{
+                                @include sprite($sprite-cm4-btm-icn-discovery-white-2x)
+                            }
+    
+                            &.icon-mine{
+                                @include sprite($sprite-cm4-btm-icn-account-white-2x)
+                            }
                         }
                     }
                 }
