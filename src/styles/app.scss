@@ -1,55 +1,44 @@
-
-
-
-#app{
+#app {
+  height: 100%;
+  #pages-box {
     height: 100%;
-  
-    padding-top: $headerHeight;
-    #pages-box{
-        height: 100%;
-        background: yellow;
-        .pages-scroll-view{
-            >.swiper-scrollbar{
-                height: calc(98% - #{$footerHeight});
-            }
-            .page-box-container{
-                &.fade-enter-active{
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                }
-            }
+    .pages-scroll-view {
+      > .swiper-scrollbar {
+        top: calc(1% + #{$headerHeight});
+        height: calc(100% - #{$footerHeight} - #{$headerHeight} - 2%);
+      }
+      .page-box-container {
+        padding-top: $headerHeight;
+        padding-bottom: $footerHeight;
+        &.fade-enter-active {
+          position: absolute;
+          left: 0;
+          top: 0;
         }
-        
+      }
     }
-    #fixed-box{
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        pointer-events: none;
-        z-index: 10;
-        >*{
-            pointer-events: auto;
-        }
+  }
+  #fixed-box {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 10;
+    > * {
+      pointer-events: auto;
     }
+  }
 }
 
-
-
-
-
-
-
 .icons {
-    width: 1em; height: 1em;
-    vertical-align: -0.15em;
-    fill: currentColor;
-    overflow: hidden;
- }
-
-
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
 
 .fade-enter,
 .fade-leave-to {
@@ -58,7 +47,7 @@
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity .3s;
+  transition: opacity 0.3s;
 }
 
 .scale-enter,
@@ -68,5 +57,5 @@
 
 .scale-enter-active,
 .scale-leave-active {
-  transition: transform .3s;
+  transition: transform 0.3s;
 }
