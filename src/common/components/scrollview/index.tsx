@@ -55,10 +55,8 @@ ScrollViewSlots
   }
 
   private observeResize() {
-    const wrapper: HTMLElement = this.$el as HTMLElement;
-    const scroller: HTMLElement = this.$el.querySelector(".swiper-slide *");
+  
     const elements: HTMLElement[] = [this.$el as HTMLElement, this.$el.querySelector(".swiper-slide")]
-    console.log(wrapper, scroller)
     const robserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (elements.includes(entry.target as HTMLElement)) {

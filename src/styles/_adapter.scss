@@ -1,9 +1,10 @@
 html {
-  &[data-screen="portrait"] {
+
+  &.portrait{
     font-size: calc(100vw / 7.5);
   }
-
-  &[data-screen="landscape"] {
+  
+  &.landscape {
     font-size: calc(100vw / 13.34);
   }
 

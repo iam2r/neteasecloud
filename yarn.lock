@@ -2808,6 +2808,11 @@ csso@^4.0.2:
   dependencies:
     css-tree "1.0.0-alpha.39"
 
+current-device@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.npmjs.org/current-device/-/current-device-0.10.1.tgz#aa6bf844eb4c505fe4b734b7cd1d01d074f161e1"
+  integrity sha512-bjH+Ge4aISRjZnuh9VWeGJuB0v2YMknfk+5XWIcRe9wHYaQDTSchUbccTFMJrN37xr3AOaV37sllVdPhdqJcXA==
+
 cwise-compiler@^1.0.0, cwise-compiler@^1.1.2:
   version "1.1.3"
   resolved "https://registry.npmjs.org/cwise-compiler/-/cwise-compiler-1.1.3.tgz#f4d667410e850d3a313a7d2db7b1e505bb034cc5"
