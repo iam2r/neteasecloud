@@ -928,6 +928,11 @@
   resolved "https://registry.npm.taobao.org/@types/json-schema/download/@types/json-schema-7.0.5.tgz?cache=0&sync_timestamp=1591720921048&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fjson-schema%2Fdownload%2F%40types%2Fjson-schema-7.0.5.tgz#dcce4430e64b443ba8945f0290fb564ad5bac6dd"
   integrity sha1-3M5EMOZLRDuolF8CkPtWStW6xt0=
 
+"@types/lodash@^4.14.158":
+  version "4.14.158"
+  resolved "https://r.cnpmjs.org/@types/lodash/download/@types/lodash-4.14.158.tgz#b38ea8b6fe799acd076d7a8d7ab71c26ef77f785"
+  integrity sha1-s46otv55ms0HbXqNerccJu9394U=
+
 "@types/minimatch@*":
   version "3.0.3"
   resolved "https://registry.npm.taobao.org/@types/minimatch/download/@types/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
@@ -2177,7 +2182,7 @@ callsites@^3.0.0:
   resolved "https://registry.npmjs.org/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
-camel-case@3.0.x:
+camel-case@3.0.x, camel-case@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/camel-case/download/camel-case-3.0.0.tgz#ca3c3688a4e9cf3a4cda777dc4dcbc713249cf73"
   integrity sha1-yjw2iKTpzzpM2nd9xNy8cTJJz3M=
@@ -3413,6 +3418,73 @@ error-stack-parser@^2.0.0:
   integrity sha1-WpmnB716TFinl5AtSNgoA+3mqtg=
   dependencies:
     stackframe "^1.1.1"
+
+eruda-benchmark@^1.0.0:
+  version "1.0.0"
+  resolved "https://r.cnpmjs.org/eruda-benchmark/download/eruda-benchmark-1.0.0.tgz#bc60a0897cfd180863156b037202575c4c4cc637"
+  integrity sha1-vGCgiXz9GAhjFWsDcgJXXExMxjc=
+
+eruda-code@^1.0.0:
+  version "1.0.0"
+  resolved "https://r.cnpmjs.org/eruda-code/download/eruda-code-1.0.0.tgz#8539899f067c3cc43bec312b10292da581f2f835"
+  integrity sha1-hTmJnwZ8PMQ77DErECktpYHy+DU=
+
+eruda-dom@^1.0.1:
+  version "1.1.0"
+  resolved "https://r.cnpmjs.org/eruda-dom/download/eruda-dom-1.1.0.tgz#6fef5ad8e7ac83decc076ac6d3fe78865c0b8d66"
+  integrity sha1-b+9a2Oesg97MB2rG0/54hlwLjWY=
+
+eruda-features@^1.0.2:
+  version "1.0.2"
+  resolved "https://r.cnpmjs.org/eruda-features/download/eruda-features-1.0.2.tgz#32bd0c0fc591121b9150c9c08d8cdab36ffc4d7b"
+  integrity sha1-Mr0MD8WREhuRUMnAjYzas2/8TXs=
+
+eruda-fps@^1.0.2:
+  version "1.1.2"
+  resolved "https://r.cnpmjs.org/eruda-fps/download/eruda-fps-1.1.2.tgz#250553e44592f747fe38ede726f0e0a383661bda"
+  integrity sha1-JQVT5EWS90f+OO3nJvDgo4NmG9o=
+
+eruda-geolocation@^1.1.0:
+  version "1.1.0"
+  resolved "https://r.cnpmjs.org/eruda-geolocation/download/eruda-geolocation-1.1.0.tgz#213c962851dab5cd679d7130c75b5fecba8afe29"
+  integrity sha1-ITyWKFHatc1nnXEwx1tf7LqK/ik=
+
+eruda-memory@^1.0.1:
+  version "1.1.1"
+  resolved "https://r.cnpmjs.org/eruda-memory/download/eruda-memory-1.1.1.tgz#d560383c71c73e60232b0f686c86956c205700c9"
+  integrity sha1-1WA4PHHHPmAjKw9obIaVbCBXAMk=
+
+eruda-orientation@^1.0.0:
+  version "1.0.0"
+  resolved "https://r.cnpmjs.org/eruda-orientation/download/eruda-orientation-1.0.0.tgz#3260a062ec20091d51a8c1fe3a02a0a491afa7f0"
+  integrity sha1-MmCgYuwgCR1RqMH+OgKgpJGvp/A=
+
+eruda-timing@^1.1.2:
+  version "1.1.3"
+  resolved "https://r.cnpmjs.org/eruda-timing/download/eruda-timing-1.1.3.tgz#fd5700803ec4aa2377943e10e05337d7de2cb9ab"
+  integrity sha1-/VcAgD7EqiN3lD4Q4FM3194suas=
+
+eruda-webpack-plugin@^1.2.0:
+  version "1.2.0"
+  resolved "https://r.cnpmjs.org/eruda-webpack-plugin/download/eruda-webpack-plugin-1.2.0.tgz#481ef2faedc308454b1929dbd0ee75fa02bd04a5"
+  integrity sha1-SB7y+u3DCEVLGSnb0O51+gK9BKU=
+  dependencies:
+    camel-case "^3.0.0"
+    eruda "^1.5.4"
+    eruda-benchmark "^1.0.0"
+    eruda-code "^1.0.0"
+    eruda-dom "^1.0.1"
+    eruda-features "^1.0.2"
+    eruda-fps "^1.0.2"
+    eruda-geolocation "^1.1.0"
+    eruda-memory "^1.0.1"
+    eruda-orientation "^1.0.0"
+    eruda-timing "^1.1.2"
+
+eruda@^1.5.4:
+  version "1.10.3"
+  resolved "https://r.cnpmjs.org/eruda/download/eruda-1.10.3.tgz#3a2b065e8006bc84232d2336cd82a192439a0c45"
+  integrity sha1-OisGXoAGvIQjLSM2zYKhkkOaDEU=
 
 es-abstract@^1.17.0-next.1, es-abstract@^1.17.2, es-abstract@^1.17.5:
   version "1.17.6"
