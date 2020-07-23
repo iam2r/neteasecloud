@@ -7,6 +7,7 @@ export default class BrowsersHack extends EventEmitter {
   private lastTouchEnd: number = 0;
   private isWinPlatForm: boolean = /^Win\w+/.test(navigator.platform);
   private innerHeightStore: number = innerHeight;
+  private innerHeightWatchRaf: number;
   private browser: {
     chrome: boolean;
     safari: boolean;
@@ -175,15 +176,16 @@ export default class BrowsersHack extends EventEmitter {
     if (device.desktop()) {
       return;
     }
-    //移动端需要监听高度是否发生了变化,500毫秒内高度不发生变化才算稳定
+    // 移动端需要监听高度是否发生了变化,500毫秒内高度不发生变化才算稳定
     const start = +new Date();
     const watchInnerHeight = () => {
+      cancelAnimationFrame(this.innerHeightWatchRaf);
       const stop = +new Date() - start > 500;
       if (stop) return;
       if (innerHeight != this.innerHeightStore) {
         return this.emit("resize");
       }
-      requestAnimationFrame(watchInnerHeight);
+      this.innerHeightWatchRaf = requestAnimationFrame(watchInnerHeight);
     };
     watchInnerHeight();
   }

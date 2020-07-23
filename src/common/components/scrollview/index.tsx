@@ -15,9 +15,9 @@ export interface ScrollViewSlots {
 
 @Component
 export default class ScrollView extends tsx<
-ScrollViewProps,
-any,
-ScrollViewSlots
+  ScrollViewProps,
+  any,
+  ScrollViewSlots
 > {
   @Prop({
     default: () => {
@@ -55,8 +55,10 @@ ScrollViewSlots
   }
 
   private observeResize() {
-  
-    const elements: HTMLElement[] = [this.$el as HTMLElement, this.$el.querySelector(".swiper-slide")]
+    const elements: HTMLElement[] = [
+      this.$el as HTMLElement,
+      this.$el.querySelector(".swiper-slide"),
+    ];
     const robserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (elements.includes(entry.target as HTMLElement)) {
@@ -64,7 +66,7 @@ ScrollViewSlots
         }
       }
     });
-    elements.forEach(element => robserver.observe(element));
+    elements.forEach((element) => robserver.observe(element));
   }
 
   private initClickHandel() {

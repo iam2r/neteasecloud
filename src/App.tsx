@@ -12,9 +12,9 @@ export default class App extends tsx<any> {
 
   @Watch("$state.resizeCount")
   protected onResize() {
-    this.$nextTick(() => {
+    setTimeout(() => {
       this.pageScroll.updateScroll();
-    });
+    }, 400);
   }
 
   protected render() {
