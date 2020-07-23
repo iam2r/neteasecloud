@@ -9,10 +9,20 @@
     height: auto;
   }
   .swiper-scrollbar {
-    width: 6px;
     background: transparent;
     .swiper-scrollbar-drag {
-      background: rgba(138, 138, 138,.8);
+      background: rgba(138, 138, 138, 0.8);
+    }
+  }
+  &.swiper-container-horizontal {
+    > .swiper-scrollbar {
+      height: 6px;
+    }
+  }
+
+  &.swiper-container-vertical {
+    > .swiper-scrollbar {
+      width: 6px;
     }
   }
 }

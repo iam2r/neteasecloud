@@ -1,4 +1,4 @@
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import { Component as tsx } from "vue-tsx-support";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import ResizeObserver from "resize-observer-polyfill";
@@ -26,8 +26,6 @@ export default class ScrollView extends tsx<
         slidesPerView: "auto",
         freeMode: true,
         noSwiping: true,
-        observer: true,
-        observeParents: true,
         scrollbar: {
           el: ".swiper-scrollbar",
           draggable: true,
@@ -44,6 +42,13 @@ export default class ScrollView extends tsx<
 
   private get swiperScroll(): any {
     return (this.$refs.mySwiper as any).$swiper;
+  }
+
+  @Watch("$state.resizeCount")
+  protected onResize() {
+    setTimeout(() => {
+      this.updateScroll();
+    }, 400);
   }
 
   protected mounted() {
@@ -117,28 +122,34 @@ export default class ScrollView extends tsx<
   protected render(): VNode {
     return (
       <Swiper
+        cleanup-styles-on-destroy={false}
         ref="mySwiper"
         class="scroll-container"
         options={{
           ...this.options,
-          scrollbar: {
-            ...this.options.scrollbar,
-            el: this.options.scrollbar.el + "-" + this._uid,
-          },
+          scrollbar: this.options.scrollbar
+            ? {
+                ...this.options.scrollbar,
+                el: this.options.scrollbar.el + "-" + this._uid,
+              }
+            : {},
         }}
       >
         <SwiperSlide ref="scroller" class={this.scrollerClass}>
           {this.$scopedSlots.default()}
         </SwiperSlide>
-        <div
-          class={[
-            "swiper-scrollbar",
-            (this.options.scrollbar.el + "-" + this._uid)
-              .replace(".", "")
-              .replace("#", ""),
-          ]}
-          slot="scrollbar"
-        ></div>
+
+        {this.options.scrollbar && (
+          <div
+            class={[
+              "swiper-scrollbar",
+              (this.options.scrollbar.el + "-" + this._uid)
+                .replace(".", "")
+                .replace("#", ""),
+            ]}
+            slot="scrollbar"
+          ></div>
+        )}
       </Swiper>
     );
   }

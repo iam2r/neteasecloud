@@ -1,9 +1,8 @@
 html {
-
-  &.portrait{
+  &.portrait {
     font-size: calc(100vw / 7.5);
   }
-  
+
   &.landscape {
     font-size: calc(100vw / 13.34);
   }
@@ -16,5 +15,6 @@ html {
     right: 0;
     top: 0;
     bottom: 0;
+    background-color: $mainColor;
   }
 }

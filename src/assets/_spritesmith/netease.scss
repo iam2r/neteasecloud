@@ -33,9 +33,9 @@ $sprite-cm2-icn-back-2x: (
 );
 $sprite-cm2-list-icn-search-2x-name: "sprite_cm2_list_icn_search@2x";
 $sprite-cm2-list-icn-search-2x-x: 384px;
-$sprite-cm2-list-icn-search-2x-y: 210px;
+$sprite-cm2-list-icn-search-2x-y: 247px;
 $sprite-cm2-list-icn-search-2x-offset-x: -384px;
-$sprite-cm2-list-icn-search-2x-offset-y: -210px;
+$sprite-cm2-list-icn-search-2x-offset-y: -247px;
 $sprite-cm2-list-icn-search-2x-width: 24px;
 $sprite-cm2-list-icn-search-2x-height: 24px;
 $sprite-cm2-list-icn-search-2x-total-width: 436px;
@@ -43,15 +43,37 @@ $sprite-cm2-list-icn-search-2x-total-height: 383px;
 $sprite-cm2-list-icn-search-2x-image: "~@/assets/_spritesmith/netease.png";
 $sprite-cm2-list-icn-search-2x: (
   384px,
-  210px,
+  247px,
   -384px,
-  -210px,
+  -247px,
   24px,
   24px,
   436px,
   383px,
   "~@/assets/_spritesmith/netease.png",
   "sprite_cm2_list_icn_search@2x"
+);
+$sprite-cm2-playlist-icn-delete-dis-2x-name: "sprite_cm2_playlist_icn_delete_dis@2x";
+$sprite-cm2-playlist-icn-delete-dis-2x-x: 384px;
+$sprite-cm2-playlist-icn-delete-dis-2x-y: 210px;
+$sprite-cm2-playlist-icn-delete-dis-2x-offset-x: -384px;
+$sprite-cm2-playlist-icn-delete-dis-2x-offset-y: -210px;
+$sprite-cm2-playlist-icn-delete-dis-2x-width: 36px;
+$sprite-cm2-playlist-icn-delete-dis-2x-height: 36px;
+$sprite-cm2-playlist-icn-delete-dis-2x-total-width: 436px;
+$sprite-cm2-playlist-icn-delete-dis-2x-total-height: 383px;
+$sprite-cm2-playlist-icn-delete-dis-2x-image: "~@/assets/_spritesmith/netease.png";
+$sprite-cm2-playlist-icn-delete-dis-2x: (
+  384px,
+  210px,
+  -384px,
+  -210px,
+  36px,
+  36px,
+  436px,
+  383px,
+  "~@/assets/_spritesmith/netease.png",
+  "sprite_cm2_playlist_icn_delete_dis@2x"
 );
 $sprite-cm4-btm-icn-account-white-2x-name: "sprite_cm4_btm_icn_account_white@2x";
 $sprite-cm4-btm-icn-account-white-2x-x: 285px;
@@ -367,6 +389,7 @@ $netease-spritesheet-image: "~@/assets/_spritesmith/netease.png";
 $netease-spritesheet-sprites: (
   $sprite-cm2-icn-back-2x,
   $sprite-cm2-list-icn-search-2x,
+  $sprite-cm2-playlist-icn-delete-dis-2x,
   $sprite-cm4-btm-icn-account-white-2x,
   $sprite-cm4-btm-icn-account-2x,
   $sprite-cm4-btm-icn-discovery-white-2x,

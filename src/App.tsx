@@ -1,22 +1,19 @@
 import { Component as tsx } from "vue-tsx-support";
-import { Component, Ref, Watch } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import { PortalTarget } from "portal-vue";
 import ScrollView from "@/common/components/scrollview";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import "@/styles/app.scss";
+export enum PortalName {
+  FIXED = "fixed",
+}
+export enum PortalOrder {
+  SEARCH,
+}
+
 @Component
 export default class App extends tsx<any> {
-  @Ref()
-  private readonly pageScroll!: ScrollView;
-
-  @Watch("$state.resizeCount")
-  protected onResize() {
-    setTimeout(() => {
-      this.pageScroll.updateScroll();
-    }, 400);
-  }
-
   protected render() {
     return (
       <div id="app">
@@ -42,7 +39,7 @@ export default class App extends tsx<any> {
         <div id="fixed-box">
           <Header />
           <Footer />
-          <PortalTarget name={"fixed"} multiple />
+          <PortalTarget name={PortalName.FIXED} multiple />
         </div>
       </div>
     );
