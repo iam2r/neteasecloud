@@ -142,12 +142,27 @@ export default class BrowsersHack extends EventEmitter {
         ? height < screenHeight + diff
         : height == clientHeight;
     const $body = document.body;
-
+    let lock = false;
     if (hasNavBar && newOrientation == "landscape") {
+      if (lock) return;
+      lock = true;
       $body.style.pointerEvents = "none";
       $body.style.height = "200vw";
-      window.scrollTo(0, 0);
+      const end = 0;
+      const start =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      const distance = end - start;
+      let result = start;
+      const step = distance / 40;
+      (function animation() {
+        if (result != end) {
+          result += step;
+          window.scrollTo(0, result);
+          requestAnimationFrame(animation);
+        }
+      })();
     } else {
+      lock = false;
       $body.style.pointerEvents = "";
       $body.style.height = "";
     }
