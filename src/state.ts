@@ -9,9 +9,11 @@ declare module "vue/types/vue" {
 
 export interface State {
   transitions: { [key: string]: string; pages: string };
+  resizeCount: number;
 }
 
 export const state: State = {
+  resizeCount: 0,
   transitions: {
     pages: "fade",
   },

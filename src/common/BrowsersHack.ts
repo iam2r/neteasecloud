@@ -1,13 +1,9 @@
+import EventEmitter from "@/common/EventEmitter";
 import device, { DeviceOrientation } from "current-device";
-
+device.onChangeOrientation;
 export type VisibilityType = "visible" | "hidden";
 
-export default class BrowsersHack {
-  private eventsList: {
-    onChangeVisibility: Array<(newVisibility: VisibilityType) => void>;
-  } = {
-    onChangeVisibility: [],
-  };
+export default class BrowsersHack extends EventEmitter {
   private lastTouchEnd: number = 0;
   private isWinPlatForm: boolean = /^Win\w+/.test(navigator.platform);
   private innerHeightStore: number = innerHeight;
@@ -51,7 +47,14 @@ export default class BrowsersHack {
   })();
 
   constructor() {
+    super();
+
+    this.on("resize", () => {
+      this.doResize();
+    });
+
     this.onResize();
+
     this.initEvents();
   }
 
@@ -137,17 +140,15 @@ export default class BrowsersHack {
       newOrientation == "landscape"
         ? height < screenHeight + diff
         : height == clientHeight;
+    const $body = document.body;
 
-    if (newOrientation == "landscape") {
-      const $body = document.body;
-      if (hasNavBar) {
-        $body.style.pointerEvents = "none";
-        $body.style.height = "200vw";
-        window.scrollTo(0, 0);
-      } else {
-        $body.style.pointerEvents = "";
-        $body.style.height = "";
-      }
+    if (hasNavBar && newOrientation == "landscape") {
+      $body.style.pointerEvents = "none";
+      $body.style.height = "200vw";
+      window.scrollTo(0, 0);
+    } else {
+      $body.style.pointerEvents = "";
+      $body.style.height = "";
     }
   }
 
@@ -156,7 +157,7 @@ export default class BrowsersHack {
       ? "landscape"
       : "portrait";
     const height = (this.innerHeightStore = innerHeight);
-    console.log(`New orientation is ${newOrientation}`);
+    console.log(`New orientation is ${newOrientation},New height is ${height}`);
 
     if (
       device.mobile() &&
@@ -170,7 +171,7 @@ export default class BrowsersHack {
   }
 
   private onResize() {
-    this.doResize();
+    this.emit("resize");
     if (device.desktop()) {
       return;
     }
@@ -178,8 +179,10 @@ export default class BrowsersHack {
     const start = +new Date();
     const watchInnerHeight = () => {
       const stop = +new Date() - start > 500;
-      if (stop && innerHeight == this.innerHeightStore) return;
-      this.doResize();
+      if (stop) return;
+      if (innerHeight != this.innerHeightStore) {
+        return this.emit("resize");
+      }
       requestAnimationFrame(watchInnerHeight);
     };
     watchInnerHeight();
@@ -210,14 +213,11 @@ export default class BrowsersHack {
         e.preventDefault();
         break;
       case this.visibility.visibilityChange:
-        this.eventsList.onChangeVisibility.forEach((it) =>
-          it((document as any)[this.visibility.hidden] ? "hidden" : "visible")
+        this.emit<[VisibilityType]>(
+          "visibilitychange",
+          (document as any)[this.visibility.hidden] ? "hidden" : "visible"
         );
         break;
     }
-  }
-
-  public onChangeVisibility(cb: (newVisibility: VisibilityType) => void) {
-    this.eventsList.onChangeVisibility.push(cb);
   }
 }

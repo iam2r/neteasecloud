@@ -25,6 +25,10 @@ module.exports = {
     config
       .plugin("sprites")
       .use(require("webpack-spritesmith"), [require("./sprites.config")]);
-    config.plugin("eruds").use(require("eruda-webpack-plugin"));
+    config.plugin("eruds").use(require("eruda-webpack-plugin"), [
+      {
+        entry: /app\.js$/,
+      },
+    ]);
   },
 };
