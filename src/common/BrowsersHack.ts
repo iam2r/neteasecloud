@@ -174,11 +174,11 @@ export default class BrowsersHack {
     if (device.desktop()) {
       return;
     }
-    //移动端需要监听高度是否发生了变化
+    //移动端需要监听高度是否发生了变化,500毫秒内高度不发生变化才算稳定
     const start = +new Date();
     const watchInnerHeight = () => {
       const stop = +new Date() - start > 500;
-      if (stop || innerHeight == this.innerHeightStore) return;
+      if (stop && innerHeight == this.innerHeightStore) return;
       this.doResize();
       requestAnimationFrame(watchInnerHeight);
     };
