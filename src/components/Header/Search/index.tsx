@@ -20,6 +20,7 @@ enum SearchPageStatus {
 
 @Component
 export default class Search extends tsx<any> {
+  private focus: boolean = false;
   private pageStatus: SearchPageStatus = SearchPageStatus.DEFAULT;
   private searchValue: string = "";
   private searchAdvice: ResponseSearchAdvice["data"] = {
@@ -61,33 +62,55 @@ export default class Search extends tsx<any> {
     this.hotList = res.data;
   }
 
+  private async initSearchSuggest() {}
+
   @Watch("searchValue")
   protected onSearchValueChange() {
-    if (this.searchValue) return;
-    this.initSearchAdvice();
+    if (this.searchValue) {
+      if (this.focus) {
+        if (this.pageStatus == SearchPageStatus.SUGGEST) {
+          this.initSearchSuggest();
+        } else {
+          this.pageStatus = SearchPageStatus.SUGGEST;
+        }
+      }
+    } else {
+      this.pageStatus = SearchPageStatus.HOT;
+    }
   }
 
-  @Watch("pageStatus")
+  @Watch("pageStatus", { immediate: true })
   protected onPageStatusChange(
     newVal: SearchPageStatus,
     oldVal: SearchPageStatus
   ) {
+    if (newVal == SearchPageStatus.DEFAULT) {
+      this.initSearchAdvice();
+      this.inputDom && this.inputDom.blur();
+    }
+
     if (newVal == SearchPageStatus.HOT) {
       this.initSearchHotDetail();
     }
+
+    if (newVal == SearchPageStatus.SUGGEST) {
+      this.initSearchSuggest();
+    }
+
+    if (newVal == SearchPageStatus.RESULT) {
+      this.initSearch();
+    }
   }
 
-  private togglePageStatus(status: SearchPageStatus) {
-    this.pageStatus = status;
+  private onFocus() {
+    this.focus = true;
+    if (this.pageStatus == SearchPageStatus.DEFAULT) {
+      this.pageStatus = SearchPageStatus.HOT;
+    }
   }
 
-  private toDefault() {
-    this.togglePageStatus(SearchPageStatus.DEFAULT);
-    this.inputDom.blur();
-  }
-
-  protected created() {
-    this.initSearchAdvice();
+  private onBlur() {
+    this.focus = false;
   }
 
   private get checkPageStatus() {
@@ -101,6 +124,13 @@ export default class Search extends tsx<any> {
 
   private deleteHistory() {
     this.historyList = [];
+  }
+
+  private toResult(keywords: string) {
+    this.searchValue = keywords;
+    this.$nextTick(() => {
+      this.pageStatus = SearchPageStatus.RESULT;
+    });
   }
 
   private renderHot() {
@@ -133,7 +163,7 @@ export default class Search extends tsx<any> {
                     <v-touch
                       tag="li"
                       onTap={() => {
-                        console.log(history);
+                        this.toResult(history);
                       }}
                     >
                       {history}
@@ -152,7 +182,12 @@ export default class Search extends tsx<any> {
           <ul class="content-box">
             {this.hotList.length != 0 &&
               this.hotList.map(({ searchWord, iconType, content }, i) => (
-                <li>
+                <v-touch
+                  tag="li"
+                  onTap={() => {
+                    this.toResult(searchWord);
+                  }}
+                >
                   <span class={i < 4 ? "mark" : ""}>{i + 1}</span>
                   <div>
                     <section class="search-word">
@@ -176,7 +211,7 @@ export default class Search extends tsx<any> {
                       <p>{content}</p>
                     </section>
                   </div>
-                </li>
+                </v-touch>
               ))}
           </ul>
         </section>
@@ -196,31 +231,43 @@ export default class Search extends tsx<any> {
     return (
       <div class="search-component" data-status={this.pageStatus}>
         <div class="search-input-container">
-          <v-touch
-            tag="i"
-            class="icon-search"
-            onTap={() => {
-              this.initSearch();
-            }}
-          ></v-touch>
+          <v-touch tag="i" class="icon-search"></v-touch>
 
           <input
             ref="input-dom"
             onFocus={() => {
-              this.togglePageStatus(SearchPageStatus.HOT);
+              this.onFocus();
             }}
-            onKeydown={modifiers.enter(this.initSearch)}
+            onBlur={() => {
+              this.onBlur();
+            }}
+            onInput={(e) => {
+              //v-model 默认不会在输入法组合文字过程中得到更新
+              this.searchValue = (e.target as any).value;
+            }}
             type="text"
             placeholder={this.searchAdvice.showKeyword}
             v-model={this.searchValue}
           />
           <transition name="fade">
             <v-touch
+              class="search-delete"
+              tag="i"
+              onTap={() => {
+                this.searchValue = "";
+              }}
+              v-show={this.searchValue}
+            >
+              +
+            </v-touch>
+          </transition>
+          <transition name="fade">
+            <v-touch
               tag="span"
               onTap={() => {
-                this.toDefault();
+                this.pageStatus = SearchPageStatus.DEFAULT;
               }}
-              v-show={this.checkPageStatus.isHot}
+              v-show={!this.checkPageStatus.isDefault}
               class="btn-leave"
             >
               取消

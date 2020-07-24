@@ -105,7 +105,7 @@ export default class ScrollView extends tsx<
 
   public stopScroll() {
     const swiper = this.swiperScroll;
-    this.scrollTo(swiper.getTranslate(), 0);
+    !swiper.destroyed && this.scrollTo(swiper.getTranslate(), 0);
   }
 
   public scrollTo(translate: number, duration: number) {
