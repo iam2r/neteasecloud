@@ -22,4 +22,4 @@ pnpm-debug.log*
 *.sw?
 
 # sprites
-/_spritesmith
+_spritesmith
