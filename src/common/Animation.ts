@@ -114,7 +114,7 @@ export default class Animation<
         window.setTimeout(callback, 1000 / 60);
       };
     const step = () => {
-      let now = this.getNow();
+      const now = this.getNow();
 
       if (now >= destTime) {
         this.setTarget((key) => end[key]);
@@ -123,8 +123,8 @@ export default class Animation<
         this.emit("complete", this.target);
         return;
       }
-      now = (now - startTime) / duration;
-      const easing = easeMap[ease].fn(now);
+      const t = (now - startTime) / duration;
+      const easing = easeMap[ease].fn(t); //progress;
       this.setTarget((key) => (end[key] - start[key]) * easing + start[key]);
       this.emit("update", this.target);
       if (this.isAnimating) {
