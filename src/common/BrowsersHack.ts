@@ -1,4 +1,5 @@
 import EventEmitter from "@/common/EventEmitter";
+import Animation from "@/common/Animation";
 import device, { DeviceOrientation } from "current-device";
 device.onChangeOrientation;
 export type VisibilityType = "visible" | "hidden";
@@ -148,20 +149,16 @@ export default class BrowsersHack extends EventEmitter {
       lock = true;
       $body.style.pointerEvents = "none";
       $body.style.height = "200vw";
-      window.scrollTo(0, 0);
-      // const end = 0;
-      // const start =
-      //   document.documentElement.scrollTop || document.body.scrollTop;
-      // const distance = end - start;
-      // let result = start;
-      // const step = distance / 10;
-      // (function animation() {
-      //   if (result != end) {
-      //     result += step;
-      //     window.scrollTo(0, result);
-      //     requestAnimationFrame(animation);
-      //   }
-      // })();
+
+      const obj = {
+        y: document.documentElement.scrollTop || document.body.scrollTop,
+      };
+
+      new Animation(obj)
+        .on("update", () => {
+          window.scrollTo(0, obj.y);
+        })
+        .to({ y: 0 }, 200);
     } else {
       lock = false;
       $body.style.pointerEvents = "";

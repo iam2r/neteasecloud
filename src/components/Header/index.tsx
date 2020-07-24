@@ -5,12 +5,16 @@ import "./style.scss";
 import { Pages } from "@/router";
 @Component
 export default class Header extends tsx<any> {
+  private get showSearch() {
+    return this.$route.name == Pages.Home;
+  }
+
   protected render() {
     return (
       <div class="header-component">
-        <transition name="fade">
-          <Search v-show={this.$route.name == Pages.Home} />
-        </transition>
+        <Search
+          style={!this.showSearch ? { opacity: 0, pointerEvents: "none" } : {}}
+        />
       </div>
     );
   }

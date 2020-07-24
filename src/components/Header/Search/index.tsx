@@ -10,9 +10,7 @@ import {
   IconType,
 } from "@/services/Response";
 import ScrollView from "@/common/components/scrollview";
-import { Portal } from "portal-vue";
-import { PortalOrder, PortalName } from "@/App";
-import { Pages } from "@/router";
+
 enum SearchPageStatus {
   DEFAULT = "default",
   HOT = "hot",
@@ -127,6 +125,7 @@ export default class Search extends tsx<any> {
                   slidesPerView: "auto",
                   freeMode: true,
                   mousewheel: true,
+                  freeModeMomentumBounce: false,
                 }}
               >
                 <ul class="history-list-scroller">
@@ -196,73 +195,67 @@ export default class Search extends tsx<any> {
   protected render() {
     return (
       <div class="search-component" data-status={this.pageStatus}>
-        <v-touch
-          tag="i"
-          class="icon-search"
-          onTap={() => {
-            this.initSearch();
-          }}
-        ></v-touch>
-
-        <input
-          ref="input-dom"
-          onFocus={() => {
-            this.togglePageStatus(SearchPageStatus.HOT);
-          }}
-          onKeydown={modifiers.enter(this.initSearch)}
-          type="text"
-          placeholder={this.searchAdvice.showKeyword}
-          v-model={this.searchValue}
-        />
-
-        <transition name="fade">
+        <div class="search-input-container">
           <v-touch
-            tag="span"
+            tag="i"
+            class="icon-search"
             onTap={() => {
-              this.toDefault();
+              this.initSearch();
             }}
-            v-show={this.checkPageStatus.isHot}
-            class="btn-leave"
-          >
-            取消
-          </v-touch>
-        </transition>
+          ></v-touch>
 
-        <Portal to={PortalName.FIXED} order={PortalOrder.SEARCH}>
+          <input
+            ref="input-dom"
+            onFocus={() => {
+              this.togglePageStatus(SearchPageStatus.HOT);
+            }}
+            onKeydown={modifiers.enter(this.initSearch)}
+            type="text"
+            placeholder={this.searchAdvice.showKeyword}
+            v-model={this.searchValue}
+          />
           <transition name="fade">
-            {!this.checkPageStatus.isDefault && (
-              <div
-                v-show={this.$route.name == Pages.Home}
-                class="search-content-mian"
-              >
-                <ScrollView
-                  class="search-scroll-view"
-                  scopedSlots={{
-                    default: () => (
-                      <transition
-                        name={this.$state.transitions.pages}
-                        mode="out-in"
-                      >
-                        <div
-                          class="search-scroll-view-scroller"
-                          key={this.pageStatus}
-                        >
-                          {[
-                            this.checkPageStatus.isHot && this.renderHot(),
-                            this.checkPageStatus.isSuggest &&
-                              this.renderSuggest(),
-                            this.checkPageStatus.isResult &&
-                              this.renderResult(),
-                          ]}
-                        </div>
-                      </transition>
-                    ),
-                  }}
-                />
-              </div>
-            )}
+            <v-touch
+              tag="span"
+              onTap={() => {
+                this.toDefault();
+              }}
+              v-show={this.checkPageStatus.isHot}
+              class="btn-leave"
+            >
+              取消
+            </v-touch>
           </transition>
-        </Portal>
+        </div>
+        <transition name="fade">
+          {!this.checkPageStatus.isDefault && (
+            <div class="search-content-mian">
+              <ScrollView
+                class="search-scroll-view"
+                scopedSlots={{
+                  default: () => (
+                    <transition
+                      name={this.$state.transitions.pages}
+                      mode="out-in"
+                    >
+                      <div
+                        class="search-scroll-view-scroller"
+                        key={this.pageStatus}
+                      >
+                        {[
+                          this.checkPageStatus.isHot && this.renderHot(),
+                          this.checkPageStatus.isSuggest &&
+                            this.renderSuggest(),
+                          this.checkPageStatus.isResult && this.renderResult(),
+                        ]}
+                      </div>
+                    </transition>
+                  ),
+                }}
+              />
+            </div>
+          )}
+        </transition>
       </div>
     );
   }

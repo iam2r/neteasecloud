@@ -3,6 +3,7 @@ import EventEmitter from "@/common/EventEmitter";
 import BrowsersHack from "@/common/BrowsersHack";
 import device from "current-device";
 import state from "@/state";
+import Animation from "@/common/Animation";
 
 const services = new Service("http://66.11.117.120:3000");
 const events = new EventEmitter();
