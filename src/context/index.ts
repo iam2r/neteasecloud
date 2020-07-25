@@ -1,7 +1,15 @@
 import NetEaseServices from "@/services";
+import { Resources } from "@/resources";
 import EventEmitter from "@/common/EventEmitter";
 import BrowsersHack from "@/common/BrowsersHack";
 import device, { CurrentDeviceInterface } from "current-device";
+
+declare module "vue/types/vue" {
+  interface Vue {
+    $state: State;
+    _uid: number;
+  }
+}
 
 export enum Events {
   Loaded = "loaded",
@@ -13,6 +21,7 @@ export interface Context {
   device: CurrentDeviceInterface;
   state: State;
   services?: NetEaseServices;
+  resources?: Resources;
 }
 
 export interface State {
