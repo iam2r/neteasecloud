@@ -1,24 +1,39 @@
-import Service from "@/services";
+import NetEaseServices from "@/services";
 import EventEmitter from "@/common/EventEmitter";
 import BrowsersHack from "@/common/BrowsersHack";
-import device from "current-device";
-import state from "@/state";
+import device, { CurrentDeviceInterface } from "current-device";
 
-const services = new Service("https://www.iam2r.tk/");
+export enum Events {
+  Loaded = "loaded",
+}
+
+export interface Context {
+  events: EventEmitter;
+  browsers: BrowsersHack;
+  device: CurrentDeviceInterface;
+  state: State;
+  services?: NetEaseServices;
+}
+
+export interface State {
+  transitions: { [key: string]: string; pages: string };
+  resizeCount: number;
+}
+
 const events = new EventEmitter();
 const browsers = new BrowsersHack();
 
-browsers.on("resize", () => {
-  state.resizeCount++;
-});
+const state: State = {
+  resizeCount: 0,
+  transitions: {
+    pages: "fade",
+  },
+};
 
-const context = {
-  services,
+const context: Context = {
   events,
   browsers,
   device,
+  state,
 };
-
-export { events, services, browsers, device };
-
 export default context;

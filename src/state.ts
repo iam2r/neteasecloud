@@ -1,5 +1,3 @@
-import Vue from "vue";
-
 declare module "vue/types/vue" {
   interface Vue {
     $state: State;
@@ -12,11 +10,11 @@ export interface State {
   resizeCount: number;
 }
 
-export const state: State = {
+const state: State = {
   resizeCount: 0,
   transitions: {
     pages: "fade",
   },
 };
 
-export default Vue.prototype.$state = Vue.observable(state);
+export default state;

@@ -1,6 +1,6 @@
 import { Component as tsx, modifiers } from "vue-tsx-support";
 import { Component, Watch, Ref } from "vue-property-decorator";
-import { services, device } from "@/context";
+import context from "@/context";
 import "./style.scss";
 import { ResquestSearch } from "@/services/Request";
 import {
@@ -59,18 +59,18 @@ export default class Search extends tsx<any> {
     searchAdvice: null,
   };
   private async querySearchAdvice() {
-    this.promisePools.searchAdvice = services.searchAdvice();
+    this.promisePools.searchAdvice = context.services.searchAdvice();
     const res = await this.promisePools.searchAdvice;
     this.searchAdvice = res.data;
   }
   private async querySearch() {
     const req = new ResquestSearch();
     req.keywords = this.searchValue || this.searchAdvice.realkeyword;
-    this.promisePools.search = services.search(req);
+    this.promisePools.search = context.services.search(req);
     const res = await this.promisePools.search;
   }
   private async querySearchHotDetail() {
-    this.promisePools.searchHotDetail = services.searchHotDetail();
+    this.promisePools.searchHotDetail = context.services.searchHotDetail();
     const res = await this.promisePools.searchHotDetail;
     this.hotList = res.data;
   }
@@ -167,7 +167,7 @@ export default class Search extends tsx<any> {
                   slidesPerView: "auto",
                   freeMode: true,
                   mousewheel: false,
-                  freeModeMomentumBounce: device.desktop ? true : false,
+                  freeModeMomentumBounce: context.device.desktop ? true : false,
                 }}
               >
                 <ul class="history-list-scroller">

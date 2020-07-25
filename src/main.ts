@@ -1,20 +1,27 @@
-import "./state";
-import "./context";
 import "minireset.css";
 import "normalize.css";
-import "swiper/css/swiper.css";
 import "@/styles/_adapter.scss";
+import context, { Events } from "@/context";
+import Preloading from "@/preloading";
 
-import Vue from "vue";
-import router from "./router";
-import App from "./App";
-import VueTouch from "vue-touch";
-import { Promised } from "vue-promised";
+//加载preloading组件
+const preloadingUI = new Preloading(1000);
 
-Vue.config.productionTip = false;
-Vue.component("promised", Promised);
-Vue.use(VueTouch, { name: "v-touch" });
-new Vue({
-  router,
-  render: (h) => h(App),
-}).$mount("#app");
+//下载合图等资源
+const loadingResources = () => {
+  return new Promise((resolve, reject) => {
+    resolve();
+  });
+};
+
+//下载js
+const loadingJs = () =>
+  import(/* webpackChunkName: "main-async" */ "@/main-async");
+
+Promise.all([
+  loadingResources(),
+  loadingJs(),
+  preloadingUI.visiblePromise(),
+]).then(() => {
+  context.events.emit(Events.Loaded);
+});
