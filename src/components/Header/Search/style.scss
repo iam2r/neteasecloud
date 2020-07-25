@@ -130,7 +130,11 @@
                 display: inline-block;
                 font-size: 0;
                 white-space: nowrap;
+
                 > li {
+                  &.flip-list-move {
+                    transition: transform 0.3s;
+                  }
                   display: inline-block;
                   height: 64px;
                   background-color: #202020;

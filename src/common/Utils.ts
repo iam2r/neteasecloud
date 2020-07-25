@@ -173,3 +173,39 @@ export const updateUrl2Blob = (url: string, blob: string) => {
       );
   });
 };
+
+export const setStore = (
+  name: string,
+  content: any,
+  storage: "localStorage" | "sessionStorage" = "localStorage"
+) => {
+  if (!name) return;
+  if (typeof content !== "string") {
+    content = JSON.stringify(content);
+  }
+  window[storage].setItem(name, content);
+};
+
+/**
+ * 获取localStorage
+ */
+export const getStore = (
+  name: string,
+  storage: "localStorage" | "sessionStorage" = "localStorage",
+  isJsonParse: boolean = false
+) => {
+  if (!name) return;
+  const item: any = window[storage].getItem(name);
+  return isJsonParse ? JSON.parse(item) : item;
+};
+
+/**
+ * 删除localStorage
+ */
+export const removeStore = (
+  name: string,
+  storage: "localStorage" | "sessionStorage" = "localStorage"
+) => {
+  if (!name) return;
+  window[storage].removeItem(name);
+};

@@ -10,6 +10,7 @@ import {
 } from "@/services/Response";
 import ScrollView from "@/common/components/scrollview";
 import Loading from "@/components/Loading";
+import { getStore, setStore } from "@/common/Utils";
 
 enum SearchPageStatus {
   DEFAULT = "default",
@@ -33,20 +34,7 @@ export default class Search extends tsx<any> {
     showKeyword: "",
     realkeyword: "",
   };
-  private historyList: string[] = [
-    "那么骄傲",
-    "往下跳",
-    "xxx",
-    "那么骄傲",
-    "往下跳",
-    "xxx",
-    "那么骄傲",
-    "往下跳",
-    "xxx",
-    "那么骄傲",
-    "往下跳",
-    "xxx",
-  ];
+
   private hotList: ResponseSearchHotDetail["data"] = [];
 
   @Ref("input-dom")
@@ -76,27 +64,13 @@ export default class Search extends tsx<any> {
   }
   private async querySearchSuggest() {}
 
-  @Watch("searchValue")
-  protected onSearchValueChange() {
-    if (this.searchValue) {
-      if (this.focus) {
-        if (this.pageStatus == SearchPageStatus.SUGGEST) {
-          this.querySearchSuggest();
-        } else {
-          this.pageStatus = SearchPageStatus.SUGGEST;
-        }
-      }
-    } else {
-      this.pageStatus = SearchPageStatus.HOT;
-    }
-  }
-
   @Watch("pageStatus", { immediate: true })
   protected onPageStatusChange(
     newVal: SearchPageStatus,
     oldVal: SearchPageStatus
   ) {
     if (newVal == SearchPageStatus.DEFAULT) {
+      this.searchValue = "";
       this.querySearchAdvice();
       this.inputDom && this.inputDom.blur();
     }
@@ -111,6 +85,18 @@ export default class Search extends tsx<any> {
 
     if (newVal == SearchPageStatus.RESULT) {
       this.querySearch();
+    }
+  }
+
+  private onInput() {
+    if (this.searchValue) {
+      if (this.pageStatus == SearchPageStatus.SUGGEST) {
+        this.querySearchSuggest();
+      } else {
+        this.pageStatus = SearchPageStatus.SUGGEST;
+      }
+    } else {
+      this.pageStatus = SearchPageStatus.HOT;
     }
   }
 
@@ -134,12 +120,34 @@ export default class Search extends tsx<any> {
     };
   }
 
+  private historyCount: number = 1; //set时+1，确保get的更新。
+
+  private get historyList(): string[] {
+    const result = getStore("search-history", "localStorage");
+    return this.historyCount && result ? JSON.parse(result) : [];
+  }
+
+  private set historyList(list: string[]) {
+    setStore("search-history", JSON.stringify(list), "localStorage");
+    this.historyCount++;
+  }
+
   private deleteHistory() {
-    this.historyList = [];
+    this.historyList = this.historyList.sort(() => Math.random() - 0.5);
+  }
+
+  private addHistory(keywords: string) {
+    const index = this.historyList.indexOf(keywords);
+    if (~index)
+      return this.historyList.unshift(...this.historyList.splice(index, 1));
+    this.historyList.unshift(keywords);
+    if (this.historyList.length > 10) this.historyList.pop();
+    this.historyList = [...this.historyList];
   }
 
   private toResult(keywords: string) {
     this.searchValue = keywords;
+    this.addHistory(keywords.trim());
     this.$nextTick(() => {
       this.pageStatus = SearchPageStatus.RESULT;
     });
@@ -170,9 +178,14 @@ export default class Search extends tsx<any> {
                   freeModeMomentumBounce: context.device.desktop ? true : false,
                 }}
               >
-                <ul class="history-list-scroller">
+                <transition-group
+                  name="flip-list"
+                  tag="ul"
+                  class="history-list-scroller"
+                >
                   {this.historyList.map((history) => (
                     <v-touch
+                      key={history}
                       tag="li"
                       onTap={() => {
                         this.toResult(history);
@@ -181,7 +194,7 @@ export default class Search extends tsx<any> {
                       <div class="flex">{history}</div>
                     </v-touch>
                   ))}
-                </ul>
+                </transition-group>
               </ScrollView>
             </div>
           </section>
@@ -269,6 +282,7 @@ export default class Search extends tsx<any> {
             onInput={(e) => {
               //v-model 默认不会在输入法组合文字过程中得到更新
               this.searchValue = (e.target as any).value;
+              this.onInput();
             }}
             type="text"
             placeholder={this.searchAdvice.showKeyword}
@@ -280,6 +294,7 @@ export default class Search extends tsx<any> {
               tag="i"
               onTap={() => {
                 this.searchValue = "";
+                this.pageStatus = SearchPageStatus.HOT;
               }}
               v-show={this.searchValue}
             ></v-touch>
