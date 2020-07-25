@@ -9,7 +9,7 @@ export default class BrowsersHack extends EventEmitter {
   private isWinPlatForm: boolean = /^Win\w+/.test(navigator.platform);
   private innerHeightStore: number = innerHeight;
   private innerHeightWatchRaf: number;
-  private browser: {
+  public browser: {
     chrome: boolean;
     safari: boolean;
     firefox: boolean;

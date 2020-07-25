@@ -3,9 +3,9 @@ module.exports = {
   devServer: {
     inline: true,
     hot: true,
-    open: true,
     host: "0.0.0.0",
     useLocalIp: true,
+    open: true,
     historyApiFallback: true,
   },
   css: {

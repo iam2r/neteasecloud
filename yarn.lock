@@ -8965,6 +8965,11 @@ vue-loader@^15.9.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-promised@^1.2.2:
+  version "1.2.2"
+  resolved "https://r.cnpmjs.org/vue-promised/download/vue-promised-1.2.2.tgz#ee233f336820037ab01dde518dea3f91e991b9ea"
+  integrity sha1-7iM/M2ggA3qwHd5Rjeo/kemRueo=
+
 vue-property-decorator@^8.4.2:
   version "8.5.1"
   resolved "https://registry.npm.taobao.org/vue-property-decorator/download/vue-property-decorator-8.5.1.tgz#571a91cf8d2b507f537d79bf8275af3184572fff"

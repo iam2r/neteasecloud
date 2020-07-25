@@ -42,20 +42,21 @@
     .search-delete {
       position: absolute;
       top: 50%;
-      transform: translateY(-50%) rotate(45deg);
+      transform: translateY(-50%);
       width: 30px;
       height: 30px;
       cursor: pointer;
       background-color: #4d4d4d;
       border-radius: 50%;
       right: 15px;
-      display: inline-block;
-      font-style: normal;
-      color: #212121;
-      font-weight: bold;
-      font-size: 26px;
-      text-align: center;
-      vertical-align: middle;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &::before {
+        content: "";
+        @include sprite($sprite-cm2-act-cover-del-2x);
+        transform: scale(0.7);
+      }
     }
     input {
       @include placeholder(#4c4c4c, 24px);
@@ -132,13 +133,19 @@
                 > li {
                   display: inline-block;
                   height: 64px;
-                  padding: 0 27px;
                   background-color: #202020;
                   border-radius: 32px;
                   font-size: 24px;
                   color: white;
-                  text-align: center;
-                  line-height: 64px;
+                  .flex {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;
+                    padding: 0 27px;
+                  }
+
                   &:not(:last-child) {
                     margin-right: 20px;
                   }
@@ -149,56 +156,63 @@
           &.search-hot-list {
             .content-box {
               padding: 0 30px;
-              display: flex;
-              flex-wrap: wrap;
-              li {
-                font-size: 24px;
-                color: #5e5e5e;
-                width: 50%;
+              .search-hot-data {
                 display: flex;
-                align-items: center;
-                margin-bottom: 50px;
-                > span {
-                  width: 40px;
-                  &.mark {
-                    color: #e94249;
-                  }
-                }
-                > div {
-                  width: calc(100% - 40px);
+                flex-wrap: wrap;
+                li {
+                  font-size: 24px;
+                  color: #5e5e5e;
+                  width: 50%;
                   display: flex;
-                  flex-direction: column;
-                  > section {
-                    width: 100%;
-                    &.search-word {
-                      margin-bottom: 10px;
-                      color: white;
-                      font-weight: bold;
-                      > span {
-                        margin-right: 10px;
-                      }
-                      > i {
-                        &[data-type="1"] {
-                          color: #e94249;
-                        }
-                        &[data-type="2"] {
-                          color: #2caa2c;
-                        }
-
-                        &[data-type="5"] {
-                          color: #e94249;
-                        }
-                      }
+                  align-items: center;
+                  margin-bottom: 50px;
+                  > span {
+                    width: 40px;
+                    &.mark {
+                      color: #e94249;
                     }
+                  }
+                  > div {
+                    width: calc(100% - 40px);
+                    display: flex;
+                    flex-direction: column;
+                    > section {
+                      width: 100%;
+                      &.search-word {
+                        margin-bottom: 10px;
+                        color: white;
+                        font-weight: bold;
+                        > span {
+                          margin-right: 10px;
+                          display: inline-block;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                          white-space: nowrap;
+                          max-width: 85%;
+                        }
+                        > i {
+                          &[data-type="1"] {
+                            color: #e94249;
+                          }
+                          &[data-type="2"] {
+                            color: #2caa2c;
+                          }
 
-                    &.hot-content {
-                      margin-top: 10px;
-                      font-size: 20px;
-                      p {
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                        width: 90%;
+                          &[data-type="5"] {
+                            color: #e94249;
+                          }
+                        }
+                      }
+
+                      &.hot-content {
+                        margin-top: 10px;
+                        font-size: 20px;
+                        p {
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                          white-space: nowrap;
+                          width: 90%;
+                        }
                       }
                     }
                   }

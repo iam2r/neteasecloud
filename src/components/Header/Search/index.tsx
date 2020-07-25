@@ -1,7 +1,6 @@
 import { Component as tsx, modifiers } from "vue-tsx-support";
 import { Component, Watch, Ref } from "vue-property-decorator";
-import { services } from "@/context";
-
+import { services, device } from "@/context";
 import "./style.scss";
 import { ResquestSearch } from "@/services/Request";
 import {
@@ -10,12 +9,19 @@ import {
   IconType,
 } from "@/services/Response";
 import ScrollView from "@/common/components/scrollview";
+import Loading from "@/components/Loading";
 
 enum SearchPageStatus {
   DEFAULT = "default",
   HOT = "hot",
   SUGGEST = "suggest",
   RESULT = "result",
+}
+
+interface PromisePools {
+  search: Promise<any>;
+  searchHotDetail: Promise<ResponseSearchHotDetail>;
+  searchAdvice: Promise<ResponseSearchAdvice>;
 }
 
 @Component
@@ -46,30 +52,36 @@ export default class Search extends tsx<any> {
   @Ref("input-dom")
   private readonly inputDom!: HTMLInputElement;
 
-  private async initSearchAdvice() {
-    const res = await services.searchAdvice();
+  //query
+  private promisePools: PromisePools = {
+    search: null,
+    searchHotDetail: null,
+    searchAdvice: null,
+  };
+  private async querySearchAdvice() {
+    this.promisePools.searchAdvice = services.searchAdvice();
+    const res = await this.promisePools.searchAdvice;
     this.searchAdvice = res.data;
   }
-
-  private async initSearch() {
+  private async querySearch() {
     const req = new ResquestSearch();
     req.keywords = this.searchValue || this.searchAdvice.realkeyword;
-    const res = await services.search(req);
+    this.promisePools.search = services.search(req);
+    const res = await this.promisePools.search;
   }
-
-  private async initSearchHotDetail() {
-    const res = await services.searchHotDetail();
+  private async querySearchHotDetail() {
+    this.promisePools.searchHotDetail = services.searchHotDetail();
+    const res = await this.promisePools.searchHotDetail;
     this.hotList = res.data;
   }
-
-  private async initSearchSuggest() {}
+  private async querySearchSuggest() {}
 
   @Watch("searchValue")
   protected onSearchValueChange() {
     if (this.searchValue) {
       if (this.focus) {
         if (this.pageStatus == SearchPageStatus.SUGGEST) {
-          this.initSearchSuggest();
+          this.querySearchSuggest();
         } else {
           this.pageStatus = SearchPageStatus.SUGGEST;
         }
@@ -85,20 +97,20 @@ export default class Search extends tsx<any> {
     oldVal: SearchPageStatus
   ) {
     if (newVal == SearchPageStatus.DEFAULT) {
-      this.initSearchAdvice();
+      this.querySearchAdvice();
       this.inputDom && this.inputDom.blur();
     }
 
-    if (newVal == SearchPageStatus.HOT) {
-      this.initSearchHotDetail();
+    if (newVal == SearchPageStatus.HOT && oldVal == SearchPageStatus.DEFAULT) {
+      this.querySearchHotDetail();
     }
 
     if (newVal == SearchPageStatus.SUGGEST) {
-      this.initSearchSuggest();
+      this.querySearchSuggest();
     }
 
     if (newVal == SearchPageStatus.RESULT) {
-      this.initSearch();
+      this.querySearch();
     }
   }
 
@@ -154,8 +166,8 @@ export default class Search extends tsx<any> {
                   direction: "horizontal",
                   slidesPerView: "auto",
                   freeMode: true,
-                  mousewheel: true,
-                  freeModeMomentumBounce: false,
+                  mousewheel: false,
+                  freeModeMomentumBounce: device.desktop ? true : false,
                 }}
               >
                 <ul class="history-list-scroller">
@@ -166,7 +178,7 @@ export default class Search extends tsx<any> {
                         this.toResult(history);
                       }}
                     >
-                      {history}
+                      <div class="flex">{history}</div>
                     </v-touch>
                   ))}
                 </ul>
@@ -179,41 +191,54 @@ export default class Search extends tsx<any> {
           <div class="title-box">
             <span>热搜榜</span>
           </div>
-          <ul class="content-box">
-            {this.hotList.length != 0 &&
-              this.hotList.map(({ searchWord, iconType, content }, i) => (
-                <v-touch
-                  tag="li"
-                  onTap={() => {
-                    this.toResult(searchWord);
-                  }}
-                >
-                  <span class={i < 4 ? "mark" : ""}>{i + 1}</span>
-                  <div>
-                    <section class="search-word">
-                      <span>{searchWord}</span>
-                      <i data-type={iconType}>
-                        {(() => {
-                          switch (iconType) {
-                            case IconType.HOT:
-                              return "HOT";
-                            case IconType.NEW:
-                              return "NEW";
-                            case IconType.UP:
-                              return "UP";
-                            default:
-                              return "";
-                          }
-                        })()}
-                      </i>
-                    </section>
-                    <section class="hot-content">
-                      <p>{content}</p>
-                    </section>
-                  </div>
-                </v-touch>
-              ))}
-          </ul>
+          <div class="content-box">
+            <promised
+              promise={this.promisePools.searchHotDetail}
+              scopedSlots={{
+                combined: ({ isPending, isDelayOver, data, error }) => [
+                  data && (
+                    <ul class="search-hot-data">
+                      {this.hotList.map(
+                        ({ searchWord, iconType, content }, i) => (
+                          <v-touch
+                            tag="li"
+                            onTap={() => {
+                              this.toResult(searchWord);
+                            }}
+                          >
+                            <span class={i < 4 ? "mark" : ""}>{i + 1}</span>
+                            <div>
+                              <section class="search-word">
+                                <span>{searchWord}</span>
+                                <i data-type={iconType}>
+                                  {(() => {
+                                    switch (iconType) {
+                                      case IconType.HOT:
+                                        return "HOT";
+                                      case IconType.NEW:
+                                        return "NEW";
+                                      case IconType.UP:
+                                        return "UP";
+                                      default:
+                                        return "";
+                                    }
+                                  })()}
+                                </i>
+                              </section>
+                              <section class="hot-content">
+                                <p>{content}</p>
+                              </section>
+                            </div>
+                          </v-touch>
+                        )
+                      )}
+                    </ul>
+                  ),
+                  isPending && <Loading />,
+                ],
+              }}
+            />
+          </div>
         </section>
       </div>
     );
@@ -257,9 +282,7 @@ export default class Search extends tsx<any> {
                 this.searchValue = "";
               }}
               v-show={this.searchValue}
-            >
-              +
-            </v-touch>
+            ></v-touch>
           </transition>
           <transition name="fade">
             <v-touch

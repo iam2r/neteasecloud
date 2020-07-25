@@ -22,6 +22,7 @@
     "vue": "^2.6.11",
     "vue-awesome-swiper": "4.1.1",
     "vue-class-component": "^7.2.3",
+    "vue-promised": "^1.2.2",
     "vue-property-decorator": "^8.4.2",
     "vue-router": "^3.2.0",
     "vue-touch": "2.0.0-beta.4",
