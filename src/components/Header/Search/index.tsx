@@ -56,6 +56,7 @@ export default class Search extends tsx<any> {
     req.keywords = this.searchValue || this.searchAdvice.realkeyword;
     this.promisePools.search = context.services.search(req);
     const res = await this.promisePools.search;
+    this.addHistory(req.keywords);
   }
   private async querySearchHotDetail() {
     this.promisePools.searchHotDetail = context.services.searchHotDetail();
@@ -145,9 +146,8 @@ export default class Search extends tsx<any> {
     this.historyList = [...this.historyList];
   }
 
-  private toResult(keywords: string) {
-    this.searchValue = keywords;
-    this.addHistory(keywords.trim());
+  private toResult(keywords?: string) {
+    keywords && (this.searchValue = keywords);
     this.$nextTick(() => {
       this.pageStatus = SearchPageStatus.RESULT;
     });
@@ -284,6 +284,9 @@ export default class Search extends tsx<any> {
               this.searchValue = (e.target as any).value;
               this.onInput();
             }}
+            onKeydown={modifiers.enter(() => {
+              this.toResult();
+            })}
             type="text"
             placeholder={this.searchAdvice.showKeyword}
             v-model={this.searchValue}
