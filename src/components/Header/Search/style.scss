@@ -92,6 +92,7 @@
     .search-scroll-view-scroller {
       .search-page-hot {
         > section {
+          width: 100%;
           &.fade-move {
             transition: transform 0.3s;
           }

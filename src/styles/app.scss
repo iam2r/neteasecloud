@@ -1,5 +1,6 @@
 body {
   background-color: $mainColor;
+  font-family: "STHeiti", "Microsoft YaHei", "Helvetica", "Arial", sans-serif;
 }
 #app {
   height: 100%;
@@ -13,6 +14,7 @@ body {
       .page-box-container {
         padding-top: $headerHeight;
         padding-bottom: $footerHeight;
+        width: 100%;
         &.fade-enter-active {
           position: absolute;
           left: 0;
