@@ -42,11 +42,11 @@
           border-radius: 50%;
           z-index: 0;
           > i {
-            &.icon-home {
+            &.icon-discovery {
               @include sprite($sprite-cm4-btm-icn-discovery-2x);
             }
 
-            &.icon-mine {
+            &.icon-account {
               @include sprite($sprite-cm4-btm-icn-account-2x);
             }
           }
@@ -62,11 +62,11 @@
             z-index: 1;
             > i {
               transform: scale(0.65);
-              &.icon-home {
+              &.icon-discovery {
                 @include sprite($sprite-cm4-btm-icn-discovery-white-2x);
               }
 
-              &.icon-mine {
+              &.icon-account {
                 @include sprite($sprite-cm4-btm-icn-account-white-2x);
               }
             }

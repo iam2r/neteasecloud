@@ -3,12 +3,12 @@ import { Component, Watch } from "vue-property-decorator";
 import Tabs from "@/common/components/tabs";
 import { Pages } from "@/router";
 import "./style.scss";
-import FontIcons from "@/common/components/fonticons";
+
 @Component
 export default class Footer extends tsx<any> {
   private list: { key: Pages; value: string }[] = [
-    { key: Pages.Home, value: "发现" },
-    { key: Pages.Mine, value: "账号" },
+    { key: Pages.Discovery, value: "发现" },
+    { key: Pages.Account, value: "账号" },
   ];
 
   private get active(): number {

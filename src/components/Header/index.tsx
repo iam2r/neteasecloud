@@ -6,7 +6,7 @@ import { Pages } from "@/router";
 @Component
 export default class Header extends tsx<any> {
   private get showSearch() {
-    return this.$route.name == Pages.Home;
+    return this.$route.name == Pages.Discovery;
   }
 
   protected render() {

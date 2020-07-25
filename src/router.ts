@@ -1,43 +1,38 @@
-import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
-import Home from '@/views/Home';
-import Mine from '@/views/Mine';
-
-
+import Vue from "vue";
+import VueRouter, { RouteConfig } from "vue-router";
+import Discovery from "@/views/Discovery";
+import Account from "@/views/Account";
 
 export enum Pages {
-    Home = 'home',
-    Mine = 'mine'
+  Discovery = "discovery",
+  Account = "account",
 }
 
-
-
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
-    {
-        path: '/' + Pages.Home,
-        name: Pages.Home,
-        component: Home
+  {
+    path: "/" + Pages.Discovery,
+    name: Pages.Discovery,
+    component: Discovery,
+  },
+  {
+    path: "/" + Pages.Account,
+    name: Pages.Account,
+    component: Account,
+  },
+  {
+    path: "*",
+    redirect: {
+      name: Pages.Discovery,
     },
-    {
-        path: '/' + Pages.Mine,
-        name: Pages.Mine,
-        component: Mine
-    },
-    {
-        path: '*',
-        redirect: {
-            name: Pages.Home
-        }
-    }
-
-]
+  },
+];
 
 const router = new VueRouter({
-    mode: 'hash',
-    base: process.env.BASE_URL,
-    routes
-})
+  mode: "hash",
+  base: process.env.BASE_URL,
+  routes,
+});
 
-export default router
+export default router;
