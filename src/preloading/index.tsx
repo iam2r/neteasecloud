@@ -25,7 +25,12 @@ export default class Preloading {
   protected render(h: Function) {
     return (
       <div id="loading-box">
-        <div class="text-base64"></div>
+        <div class="main-content">
+          <div class="text-base64"></div>
+          <div class="logo-box">
+            <i class="icon-logo"></i>
+          </div>
+        </div>
       </div>
     );
   }
