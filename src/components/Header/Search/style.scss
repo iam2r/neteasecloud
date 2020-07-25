@@ -75,6 +75,10 @@
       text-overflow: ellipsis;
       overflow: hidden;
       text-align: left;
+      &::-ms-clear,
+      ::-ms-reveal {
+        display: none;
+      }
     }
   }
 
@@ -88,6 +92,12 @@
     .search-scroll-view-scroller {
       .search-page-hot {
         > section {
+          &.fade-move {
+            transition: transform 0.3s;
+          }
+          &.fade-leave-active {
+            position: absolute;
+          }
           margin-bottom: 30px;
           .title-box {
             padding: 0 30px;
@@ -132,9 +142,9 @@
                 white-space: nowrap;
 
                 > li {
-                  &.flip-list-move {
-                    transition: transform 0.3s;
-                  }
+                  // &.flip-list-move {
+                  //   transition: transform 0.3s;
+                  // }
                   display: inline-block;
                   height: 64px;
                   background-color: #202020;

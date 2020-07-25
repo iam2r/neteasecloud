@@ -70,6 +70,7 @@ export default class Search extends tsx<any> {
     newVal: SearchPageStatus,
     oldVal: SearchPageStatus
   ) {
+    console.log(newVal, oldVal);
     if (newVal == SearchPageStatus.DEFAULT) {
       this.searchValue = "";
       this.querySearchAdvice();
@@ -90,6 +91,7 @@ export default class Search extends tsx<any> {
   }
 
   private onInput() {
+    console.log("onInput");
     if (this.searchValue) {
       if (this.pageStatus == SearchPageStatus.SUGGEST) {
         this.querySearchSuggest();
@@ -134,7 +136,7 @@ export default class Search extends tsx<any> {
   }
 
   private deleteHistory() {
-    this.historyList = this.historyList.sort(() => Math.random() - 0.5);
+    this.historyList = [];
   }
 
   private addHistory(keywords: string) {
@@ -155,9 +157,9 @@ export default class Search extends tsx<any> {
 
   private renderHot() {
     return (
-      <div class="search-page-hot">
+      <transition-group tag="div" name="fade" class="search-page-hot">
         {this.historyList.length != 0 && (
-          <section class="search-history">
+          <section key="search-history" class="search-history">
             <div class="title-box">
               <span>搜索历史</span>
               <v-touch
@@ -200,7 +202,7 @@ export default class Search extends tsx<any> {
           </section>
         )}
 
-        <section class="search-hot-list">
+        <section key="search-hot-list" class="search-hot-list">
           <div class="title-box">
             <span>热搜榜</span>
           </div>
@@ -253,7 +255,7 @@ export default class Search extends tsx<any> {
             />
           </div>
         </section>
-      </div>
+      </transition-group>
     );
   }
 
@@ -281,6 +283,7 @@ export default class Search extends tsx<any> {
             }}
             onInput={(e) => {
               //v-model 默认不会在输入法组合文字过程中得到更新
+              if (!this.focus) return; //兼容ie11，ie11 改变placeholder也会触发input事件
               this.searchValue = (e.target as any).value;
               this.onInput();
             }}

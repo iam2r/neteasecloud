@@ -13,7 +13,11 @@ export default class Header extends tsx<any> {
     return (
       <div class="header-component">
         <Search
-          style={!this.showSearch ? { opacity: 0, pointerEvents: "none" } : {}}
+          style={
+            !this.showSearch
+              ? { opacity: 0, pointerEvents: "none", visibility: "hidden" }
+              : {}
+          }
         />
       </div>
     );
