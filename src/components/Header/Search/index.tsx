@@ -17,6 +17,7 @@ import Loading from "@/components/Loading";
 import { getStore, setStore } from "@/common/Utils";
 import { Debounce } from "@/common/Decorator";
 import { divide } from "lodash";
+import { Pages } from "@/router";
 
 enum SearchPageStatus {
   DEFAULT = "default",
@@ -338,8 +339,9 @@ export default class Search extends tsx<any> {
   private readonly resultNavScroll!: ScrollView;
 
   @Watch("resultActive")
-  @Watch("$state.resizeCount")
+  @Watch("$state.resizeCount") //横竖屏变化
   protected fixedCurrentNav2Center() {
+    if (this.pageStatus != SearchPageStatus.RESULT) return;
     const $container = this.$el.querySelector(".navs-container");
     const $lis = $container.querySelectorAll(".navs-container .tabs-item");
     const container = $container.getBoundingClientRect();
