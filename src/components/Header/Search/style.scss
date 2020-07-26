@@ -72,11 +72,7 @@
       @include placeholder(#4c4c4c, 24px);
       border-radius: 36px;
       width: 100%;
-      &.has-value {
-        //预留出icon-delete按钮，使移动端点击后可以失焦（键盘撤走）
-        padding-right: 0;
-        width: calc(100% - 65px);
-      }
+
       height: 72px;
       line-height: normal;
       background: transparent;

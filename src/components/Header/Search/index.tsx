@@ -272,30 +272,32 @@ export default class Search extends tsx<any> {
       <div class="search-component" data-status={this.pageStatus}>
         <div class="search-input-container">
           <v-touch tag="i" class="icon-search"></v-touch>
+          <form action="#">
+            <input
+              class={this.searchValue ? "has-value" : "no-value"}
+              ref="input-dom"
+              onFocus={(e) => {
+                if (e.target != e.currentTarget) e.preventDefault();
+                this.onFocus();
+              }}
+              onBlur={() => {
+                this.onBlur();
+              }}
+              onInput={(e) => {
+                //v-model 默认不会在输入法组合文字过程中得到更新
+                if (!this.focus) return; //兼容ie11，ie11 改变placeholder也会触发input事件
+                this.searchValue = (e.target as any).value;
+                this.onInput();
+              }}
+              onKeydown={modifiers.enter.prevent(() => {
+                this.toResult();
+              })}
+              type="search"
+              placeholder={this.searchAdvice.showKeyword}
+              v-model={this.searchValue}
+            />
+          </form>
 
-          <input
-            class={this.searchValue ? "has-value" : "no-value"}
-            ref="input-dom"
-            onFocus={(e) => {
-              if (e.target != e.currentTarget) e.preventDefault();
-              this.onFocus();
-            }}
-            onBlur={() => {
-              this.onBlur();
-            }}
-            onInput={(e) => {
-              //v-model 默认不会在输入法组合文字过程中得到更新
-              if (!this.focus) return; //兼容ie11，ie11 改变placeholder也会触发input事件
-              this.searchValue = (e.target as any).value;
-              this.onInput();
-            }}
-            onKeydown={modifiers.enter(() => {
-              this.toResult();
-            })}
-            type="text"
-            placeholder={this.searchAdvice.showKeyword}
-            v-model={this.searchValue}
-          />
           <transition name="fade">
             <v-touch
               class="search-delete"
