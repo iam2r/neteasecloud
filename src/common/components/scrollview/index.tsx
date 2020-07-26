@@ -40,7 +40,7 @@ export default class ScrollView extends tsx<
   @Prop({ default: "" })
   private scrollerClass: string | { [key: string]: boolean };
 
-  private get swiperScroll(): any {
+  public get swiperScroll(): any {
     return (this.$refs.mySwiper as any).$swiper;
   }
 

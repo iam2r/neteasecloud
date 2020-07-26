@@ -11,9 +11,12 @@ import {
   ResponseSearchSuggest,
 } from "@/services/Response";
 import ScrollView from "@/common/components/scrollview";
+import Tabs from "@/common/components/tabs";
+import Sliders from "@/common/components/swiper";
 import Loading from "@/components/Loading";
 import { getStore, setStore } from "@/common/Utils";
-import { Throttle } from "@/common/Decorator";
+import { Debounce } from "@/common/Decorator";
+import { divide } from "lodash";
 
 enum SearchPageStatus {
   DEFAULT = "default",
@@ -33,6 +36,7 @@ interface PromisePools {
 export default class Search extends tsx<any> {
   private focus: boolean = false;
   private pageStatus: SearchPageStatus = SearchPageStatus.DEFAULT;
+
   private searchValue: string = "";
   private searchAdvice: ResponseSearchAdvice["data"] = {
     showKeyword: "",
@@ -102,11 +106,13 @@ export default class Search extends tsx<any> {
     }
   }
 
-  @Throttle(800)
+  @Debounce(300, {
+    leading: false,
+    trailing: true,
+  })
   private onInput(e) {
     if (!this.focus) return; //兼容ie11，ie11 改变placeholder也会触发input事件
     this.suggestList = [];
-    console.log("input");
     this.searchValue = (e.target as any).value; //v-model 默认不会在输入法组合文字过程中得到更新
     if (this.searchValue) {
       if (this.pageStatus == SearchPageStatus.SUGGEST) {
@@ -316,8 +322,80 @@ export default class Search extends tsx<any> {
     );
   }
 
+  private resultActive: number = 0;
+
+  private resultNavs: { id: number; name: string; pagesCount?: number }[] = [
+    { id: 1018, name: "综合" },
+    { id: 1, name: "单曲" },
+    { id: 10, name: "专辑" },
+    { id: 100, name: "歌手" },
+    { id: 1000, name: "歌单" },
+    { id: 1006, name: "歌词" },
+    { id: 1014, name: "视频" },
+  ]; //默认为 1 即单曲 , 取值意义 : 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合
+
+  @Ref("result-nav-scroll")
+  private readonly resultNavScroll!: ScrollView;
+
+  @Watch("resultActive")
+  @Watch("$state.resizeCount")
+  protected fixedCurrentNav2Center() {
+    const $container = this.$el.querySelector(".navs-container");
+    const $lis = $container.querySelectorAll(".navs-container .tabs-item");
+    const container = $container.getBoundingClientRect();
+    const start = $lis[0].getBoundingClientRect();
+    const current = $lis[this.resultActive].getBoundingClientRect();
+    const center2Start = current.x - start.x + current.width / 2; //当前元素中点距离起点的距离。
+    let translate = -center2Start + container.width / 2;
+    const swiper = this.resultNavScroll.swiperScroll;
+    translate = Math.min(swiper.minTranslate(), translate);
+    translate = Math.max(swiper.maxTranslate(), translate);
+    setTimeout(() => {
+      this.resultNavScroll.scrollTo(translate, 300);
+    });
+  }
+
   private renderResult() {
-    return <div>result</div>;
+    return (
+      <div class="search-page-result">
+        <div class="navs-container">
+          <ScrollView
+            ref="result-nav-scroll"
+            options={{
+              direction: "horizontal",
+              slidesPerView: "auto",
+              freeMode: true,
+              mousewheel: false,
+              freeModeMomentumBounce: context.device.desktop ? true : false,
+            }}
+          >
+            <Tabs
+              v-model={this.resultActive}
+              length={this.resultNavs.length}
+              scopedSlots={{
+                default: ({ i, isActive }) =>
+                  this.resultNavs.map(({ name }) => (
+                    <div>
+                      <span> {name}</span>
+                    </div>
+                  ))[i],
+              }}
+            />
+          </ScrollView>
+        </div>
+        <div class="contents-container">
+          <Sliders
+            v-model={this.resultActive}
+            length={this.resultNavs.length}
+            options={{}}
+            scopedSlots={{
+              default: (i) =>
+                this.resultNavs.map(({ name }) => <span> {name}</span>)[i],
+            }}
+          />
+        </div>
+      </div>
+    );
   }
 
   protected render() {
@@ -375,30 +453,35 @@ export default class Search extends tsx<any> {
         </div>
         <transition name="fade">
           {!this.checkPageStatus.isDefault && (
-            <div class="search-content-mian">
-              <ScrollView
-                class="search-scroll-view"
-                scopedSlots={{
-                  default: () => (
-                    <transition
-                      name={this.$state.transitions.pages}
-                      mode="out-in"
-                    >
-                      <div
-                        class="search-scroll-view-scroller"
-                        key={this.pageStatus}
+            <div name="move" class="search-content-main">
+              {[
+                <ScrollView
+                  key="before-result"
+                  class="search-scroll-view"
+                  scopedSlots={{
+                    default: () => (
+                      <transition
+                        name={this.$state.transitions.pages}
+                        mode="out-in"
                       >
-                        {[
-                          this.checkPageStatus.isHot && this.renderHot(),
-                          this.checkPageStatus.isSuggest &&
-                            this.renderSuggest(),
-                          this.checkPageStatus.isResult && this.renderResult(),
-                        ]}
-                      </div>
-                    </transition>
-                  ),
-                }}
-              />
+                        <div
+                          class="search-scroll-view-scroller"
+                          key={this.pageStatus}
+                        >
+                          {[
+                            this.checkPageStatus.isHot && this.renderHot(),
+                            this.checkPageStatus.isSuggest &&
+                              this.renderSuggest(),
+                          ]}
+                        </div>
+                      </transition>
+                    ),
+                  }}
+                />,
+                <transition name="fade">
+                  {this.checkPageStatus.isResult && this.renderResult()}
+                </transition>,
+              ]}
             </div>
           )}
         </transition>
