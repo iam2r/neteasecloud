@@ -58,18 +58,18 @@ body {
   bottom: 0;
   z-index: 10;
   .main-content {
-    $width: 436px;
-    width: $width;
+    width: 100%;
     position: absolute;
     left: 50%;
     top: 32%;
-    margin-left: -$width / 2;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     .text-base64 {
       display: inline-block;
+      $width: 436px;
       width: $width;
       height: 79px;
       opacity: 0;

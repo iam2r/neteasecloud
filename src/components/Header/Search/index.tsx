@@ -274,8 +274,10 @@ export default class Search extends tsx<any> {
           <v-touch tag="i" class="icon-search"></v-touch>
 
           <input
+            class={this.searchValue ? "has-value" : "no-value"}
             ref="input-dom"
-            onFocus={() => {
+            onFocus={(e) => {
+              if (e.target != e.currentTarget) e.preventDefault();
               this.onFocus();
             }}
             onBlur={() => {
@@ -300,6 +302,7 @@ export default class Search extends tsx<any> {
               tag="i"
               onTap={() => {
                 this.searchValue = "";
+                this.inputDom.value = "";
                 this.pageStatus = SearchPageStatus.HOT;
               }}
               v-show={this.searchValue}

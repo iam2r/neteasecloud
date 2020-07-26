@@ -7,7 +7,7 @@ import resources, { Resource } from "@/resources";
 import { loadImage } from "@/common/Utils";
 
 //加载preloading组件
-const preloading = new Preloading(1000);
+const preloading = new Preloading(2000);
 
 //下载合图等资源
 const loadingResources = () => {

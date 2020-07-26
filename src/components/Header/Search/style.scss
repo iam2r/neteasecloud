@@ -31,6 +31,7 @@
       cursor: pointer;
     }
     .icon-search {
+      pointer-events: none;
       @include sprite($sprite-cm2-list-icn-search-2x);
       position: absolute;
       top: 50%;
@@ -40,19 +41,28 @@
     }
 
     .search-delete {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 30px;
-      height: 30px;
-      cursor: pointer;
-      background-color: #4d4d4d;
-      border-radius: 50%;
-      right: 15px;
+      width: 60px;
+      height: 100%;
+      right: 0;
       display: flex;
       justify-content: center;
       align-items: center;
+      position: absolute;
+      top: 0;
+      cursor: pointer;
       &::before {
+        content: "";
+        width: 30px;
+        height: 30px;
+        background-color: #4d4d4d;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+      }
+      &::after {
         content: "";
         @include sprite($sprite-cm2-act-cover-del-2x);
         transform: scale(0.7);
@@ -62,6 +72,11 @@
       @include placeholder(#4c4c4c, 24px);
       border-radius: 36px;
       width: 100%;
+      &.has-value {
+        //预留出icon-delete按钮，使移动端点击后可以失焦（键盘撤走）
+        padding-right: 0;
+        width: calc(100% - 65px);
+      }
       height: 72px;
       line-height: normal;
       background: transparent;
