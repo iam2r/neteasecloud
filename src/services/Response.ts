@@ -24,3 +24,13 @@ export class ResponseSearchHotDetail extends IResponse {
     iconType: IconType;
   }[];
 }
+
+export interface SearchSuggest {
+  keyword: string;
+}
+
+export class ResponseSearchSuggest extends IResponse {
+  result: {
+    allMatch: SearchSuggest[];
+  };
+}

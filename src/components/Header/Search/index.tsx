@@ -2,15 +2,18 @@ import { Component as tsx, modifiers } from "vue-tsx-support";
 import { Component, Watch, Ref } from "vue-property-decorator";
 import context from "@/context";
 import "./style.scss";
-import { ResquestSearch } from "@/services/Request";
+import { ResquestSearch, ResquestSearchSuggest } from "@/services/Request";
 import {
   ResponseSearchAdvice,
   ResponseSearchHotDetail,
   IconType,
+  SearchSuggest,
+  ResponseSearchSuggest,
 } from "@/services/Response";
 import ScrollView from "@/common/components/scrollview";
 import Loading from "@/components/Loading";
 import { getStore, setStore } from "@/common/Utils";
+import { Throttle } from "@/common/Decorator";
 
 enum SearchPageStatus {
   DEFAULT = "default",
@@ -21,6 +24,7 @@ enum SearchPageStatus {
 
 interface PromisePools {
   search: Promise<any>;
+  searchSuggest: Promise<ResponseSearchSuggest>;
   searchHotDetail: Promise<ResponseSearchHotDetail>;
   searchAdvice: Promise<ResponseSearchAdvice>;
 }
@@ -36,7 +40,7 @@ export default class Search extends tsx<any> {
   };
 
   private hotList: ResponseSearchHotDetail["data"] = [];
-
+  private suggestList: SearchSuggest[] = [];
   @Ref("input-dom")
   private readonly inputDom!: HTMLInputElement;
 
@@ -45,6 +49,7 @@ export default class Search extends tsx<any> {
     search: null,
     searchHotDetail: null,
     searchAdvice: null,
+    searchSuggest: null,
   };
   private async querySearchAdvice() {
     this.promisePools.searchAdvice = context.services.searchAdvice();
@@ -63,7 +68,14 @@ export default class Search extends tsx<any> {
     const res = await this.promisePools.searchHotDetail;
     this.hotList = res.data;
   }
-  private async querySearchSuggest() {}
+  private async querySearchSuggest() {
+    const req = new ResquestSearchSuggest();
+    req.keywords = this.searchValue;
+    req.type = "mobile";
+    this.promisePools.searchSuggest = context.services.searchSuggest(req);
+    const res = await this.promisePools.searchSuggest;
+    this.suggestList = res.result?.allMatch || [];
+  }
 
   @Watch("pageStatus", { immediate: true })
   protected onPageStatusChange(
@@ -90,8 +102,12 @@ export default class Search extends tsx<any> {
     }
   }
 
-  private onInput() {
-    console.log("onInput");
+  @Throttle(800)
+  private onInput(e) {
+    if (!this.focus) return; //兼容ie11，ie11 改变placeholder也会触发input事件
+    this.suggestList = [];
+    console.log("input");
+    this.searchValue = (e.target as any).value; //v-model 默认不会在输入法组合文字过程中得到更新
     if (this.searchValue) {
       if (this.pageStatus == SearchPageStatus.SUGGEST) {
         this.querySearchSuggest();
@@ -260,7 +276,44 @@ export default class Search extends tsx<any> {
   }
 
   private renderSuggest() {
-    return <div>suggest</div>;
+    return (
+      this.searchValue && (
+        <div class="search-page-suggest">
+          <v-touch
+            class="search-tips"
+            onTap={() => {
+              this.toResult();
+            }}
+          >
+            {`搜索 “${this.searchValue}”`}
+          </v-touch>
+
+          <promised
+            promise={this.promisePools.searchSuggest}
+            scopedSlots={{
+              combined: ({ isPending, isDelayOver, data, error }) => [
+                data && (
+                  <ul class="suggest-data">
+                    {this.suggestList.map(({ keyword }) => (
+                      <v-touch
+                        tag="li"
+                        onTap={() => {
+                          this.toResult(keyword);
+                        }}
+                      >
+                        <i class="icon-search"></i>
+                        <span>{keyword}</span>
+                      </v-touch>
+                    ))}
+                  </ul>
+                ),
+                isPending && <Loading />,
+              ],
+            }}
+          />
+        </div>
+      )
+    );
   }
 
   private renderResult() {
@@ -284,10 +337,7 @@ export default class Search extends tsx<any> {
                 this.onBlur();
               }}
               onInput={(e) => {
-                //v-model 默认不会在输入法组合文字过程中得到更新
-                if (!this.focus) return; //兼容ie11，ie11 改变placeholder也会触发input事件
-                this.searchValue = (e.target as any).value;
-                this.onInput();
+                this.onInput(e);
               }}
               onKeydown={modifiers.enter.prevent(() => {
                 this.toResult();
