@@ -7,7 +7,8 @@ export interface TabsProps {
 }
 
 export interface TabsSlots {
-  default?: { i: number, isActive: boolean };
+  default?: { i: number; isActive: boolean };
+  line?: void;
 }
 
 @Component
@@ -26,6 +27,7 @@ export default class Tabs extends tsx<TabsProps, any, TabsSlots> {
   protected render(): VNode {
     return (
       <ul class="tabs-wrapper">
+        {this.$scopedSlots.line && this.$scopedSlots.line()}
         {Array.from({ length: this.length }).map((item, i) => (
           <v-touch
             key={i}

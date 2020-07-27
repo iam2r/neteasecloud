@@ -9,17 +9,7 @@
     width: 100%;
     height: $navsHeight;
     border-bottom: 1px solid #2a2a2a;
-    > .nav-line {
-      display: inline-block;
-      min-width: 84px;
-      height: 4px;
-      border-radius: 2px;
-      background-color: #ff3545;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      transition: transform 0.3s;
-    }
+
     > .swiper-container {
       .swiper-slide {
         width: auto;
@@ -28,6 +18,18 @@
           font-size: 0;
           white-space: nowrap;
           height: 100%;
+          position: relative;
+          > .nav-line {
+            display: inline-block;
+            min-width: 84px;
+            height: 4px;
+            border-radius: 2px;
+            background-color: #ff3545;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            transition: transform 0.3s;
+          }
           .tabs-item {
             display: inline-block;
             font-size: 30px;

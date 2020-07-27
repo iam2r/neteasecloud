@@ -43,32 +43,35 @@ export default class NavsSlider extends tsx<
 
   private navLineTransform: number = 0;
   private navLineWidth: number = 0;
+  private navLineDuration: number = 0;
 
   @Ref("nav-scroll")
   private readonly navScroll!: ScrollView;
 
   @Watch("active")
   @Watch("$state.resizeCount") //横竖屏变化,pc resize就会触发
-  protected fixedCurrentNav2Center() {
+  protected calcPosition() {
     const $container = this.$el.querySelector(".navs-container");
     const $lis = $container.querySelectorAll(".navs-container .tabs-item");
     const container = $container.getBoundingClientRect();
     const start = $lis[0].getBoundingClientRect();
     const current = $lis[this.active].getBoundingClientRect();
-    const lineWidth = current.width * 1.2;
+    const lineWidth = current.width * 0.8;
     const center2Start = current.x - start.x + current.width / 2; //起点情况下，当前元素中点距离起点的距离。
-    const linePosition = center2Start + (current.width - lineWidth); //假设外层滑块不动，line的位置；
+    const navLineTransform = center2Start - lineWidth / 2; //假设外层滑块不动，line的位置；
     let translate = -center2Start + container.width / 2;
-    const navLineTransform = linePosition;
     const swiper = this.navScroll.swiperScroll;
     translate = Math.min(swiper.minTranslate(), translate);
     translate = Math.max(swiper.maxTranslate(), translate);
-
+    this.navLineWidth = lineWidth;
     setTimeout(() => {
-      this.navScroll.scrollTo(translate, 300);
-      this.navLineWidth = lineWidth;
       this.navLineTransform = navLineTransform;
+      this.navScroll.scrollTo(translate, 300);
     }, 100);
+  }
+
+  protected mounted() {
+    this.calcPosition();
   }
 
   protected render(): VNode {
@@ -89,18 +92,21 @@ export default class NavsSlider extends tsx<
               v-model={this.active}
               length={this.length}
               scopedSlots={{
-                default: ({ i, isActive }) =>
+                line: () => (
+                  <div
+                    class="nav-line"
+                    style={{
+                      transform: `translate3d(${this.navLineTransform}px, 0px, 0px)`,
+                      width: this.navLineWidth + "px",
+                    }}
+                  ></div>
+                ),
+                default: ({ i, isActive }) => [
                   this.$scopedSlots.nav({ i, isActive }),
+                ],
               }}
             />
           </ScrollView>
-          <div
-            class="nav-line"
-            style={{
-              transform: `translate3d(${this.navLineTransform}px, 0px, 0px)`,
-              width: this.navLineWidth + "px",
-            }}
-          ></div>
         </div>
         <div class="contents-container">
           <Sliders

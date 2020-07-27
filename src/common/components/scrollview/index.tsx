@@ -1,12 +1,17 @@
-import { Component, Prop, Watch } from "vue-property-decorator";
+import { Component, Prop, Watch, Emit } from "vue-property-decorator";
 import { Component as tsx } from "vue-tsx-support";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import ResizeObserver from "resize-observer-polyfill";
+import SwiperClass, { SwiperOptions } from "swiper";
 import { VNode } from "vue";
 
 import "./style.scss";
 export interface ScrollViewProps {
   option?: any;
+}
+
+export interface ScrollViewEvents {
+  onSetTranslate?: (swiper: SwiperClass, translate?: number) => void;
 }
 
 export interface ScrollViewSlots {
@@ -16,7 +21,7 @@ export interface ScrollViewSlots {
 @Component
 export default class ScrollView extends tsx<
   ScrollViewProps,
-  any,
+  ScrollViewEvents,
   ScrollViewSlots
 > {
   @Prop({
@@ -50,6 +55,9 @@ export default class ScrollView extends tsx<
       this.updateScroll();
     }, 400);
   }
+
+  @Emit("setTranslate")
+  private onSetTranslate(translate: number) {}
 
   protected mounted() {
     this.initClickHandel();
@@ -125,6 +133,9 @@ export default class ScrollView extends tsx<
         cleanup-styles-on-destroy={false}
         ref="mySwiper"
         class="scroll-container"
+        onSetTranslate={() => {
+          this.onSetTranslate(this.swiperScroll.getTranslate());
+        }}
         options={{
           ...this.options,
           scrollbar: this.options.scrollbar
