@@ -12,6 +12,7 @@ import "./styles.scss";
 import ScrollView from "@/common/components/scrollview";
 import Tabs from "@/common/components/tabs";
 import Sliders from "@/common/components/swiper";
+import { setTimeout } from "timers";
 export interface NavsSliderProps {
   length: number;
 }
@@ -40,38 +41,79 @@ export default class NavsSlider extends tsx<
   private set active(val: number) {
     this.$emit("change", val);
   }
-
+  private navLineScaleX: number = 1;
   private navLineTransform: number = 0;
   private navLineWidth: number = 0;
-  private navLineDuration: number = 0;
+  private navTransitionDuration: number = 0;
+  private scrollData: {
+    tabTransform: number;
+    navLineTransform: number;
+    navLineWidth: number;
+  }[] = [];
 
   @Ref("nav-scroll")
   private readonly navScroll!: ScrollView;
 
+  private get currentScrollData() {
+    return this.scrollData[this.active];
+  }
+
   @Watch("active")
+  protected doScroll() {
+    this.navLineWidth = this.currentScrollData.navLineWidth;
+    setTimeout(() => {
+      this.navScroll.scrollTo(this.currentScrollData.tabTransform, 300);
+    }, 100);
+  }
+
   @Watch("$state.resizeCount") //横竖屏变化,pc resize就会触发
   protected calcPosition() {
     const $container = this.$el.querySelector(".navs-container");
     const $lis = $container.querySelectorAll(".navs-container .tabs-item");
     const container = $container.getBoundingClientRect();
     const start = $lis[0].getBoundingClientRect();
-    const current = $lis[this.active].getBoundingClientRect();
-    const lineWidth = current.width * 0.8;
-    const center2Start = current.x - start.x + current.width / 2; //起点情况下，当前元素中点距离起点的距离。
-    const navLineTransform = center2Start - lineWidth / 2; //假设外层滑块不动，line的位置；
-    let translate = -center2Start + container.width / 2;
-    const swiper = this.navScroll.swiperScroll;
-    translate = Math.min(swiper.minTranslate(), translate);
-    translate = Math.max(swiper.maxTranslate(), translate);
-    this.navLineWidth = lineWidth;
-    setTimeout(() => {
-      this.navLineTransform = navLineTransform;
-      this.navScroll.scrollTo(translate, 300);
-    }, 100);
+    for (let index = 0; index < $lis.length; index++) {
+      const current = $lis[index].getBoundingClientRect();
+      const navLineWidth = current.width * 0.6;
+      const center2Start = current.x - start.x + current.width / 2; //起点情况下，当前元素中点距离起点的距离。
+      const navLineTransform = center2Start - navLineWidth / 2; //假设外层滑块不动，line的位置；
+      let tabTransform = -center2Start + container.width / 2;
+      const swiper = this.navScroll.swiperScroll;
+      tabTransform = Math.min(swiper.minTranslate(), tabTransform);
+      tabTransform = Math.max(swiper.maxTranslate(), tabTransform);
+      console.log({ tabTransform, navLineTransform, navLineWidth });
+      this.$set(this.scrollData, index, {
+        tabTransform,
+        navLineTransform,
+        navLineWidth,
+      });
+    }
+    this.doScroll();
+  }
+
+  private onSetTranslate(swiper, translate) {
+    const min = this.scrollData[0].navLineTransform;
+    const max = this.scrollData[this.scrollData.length - 1].navLineTransform;
+    let progress = swiper.progress;
+    return (this.navLineTransform = min + (max - min) * progress);
+    if (progress <= 0 || progress >= 1) {
+      return (this.navLineTransform = min + (max - min) * progress);
+    } else {
+      const region = Math.floor(
+        swiper.progress / (1 / (this.scrollData.length - 1))
+      );
+      const start = this.scrollData[region].navLineTransform;
+      const end = this.scrollData[region + 1].navLineTransform;
+      const diff = end - start;
+      const ave = (max - min) / (this.scrollData.length - 1);
+      progress = progress % (1 / (this.scrollData.length - 1));
+      this.navLineTransform = start + ((diff - start) * progress * diff) / ave;
+    }
   }
 
   protected mounted() {
     this.calcPosition();
+    this.doScroll();
   }
 
   protected render(): VNode {
@@ -96,6 +138,7 @@ export default class NavsSlider extends tsx<
                   <div
                     class="nav-line"
                     style={{
+                      transitionDuration: this.navTransitionDuration + "s",
                       transform: `translate3d(${this.navLineTransform}px, 0px, 0px)`,
                       width: this.navLineWidth + "px",
                     }}
@@ -110,9 +153,20 @@ export default class NavsSlider extends tsx<
         </div>
         <div class="contents-container">
           <Sliders
+            onSetTranslate={this.onSetTranslate}
             v-model={this.active}
             length={this.length}
-            options={{ initialSlide: this.active }}
+            options={{
+              initialSlide: this.active,
+              on: {
+                touchStart: () => {
+                  this.navTransitionDuration = 0;
+                },
+                touchEnd: () => {
+                  this.navTransitionDuration = 0.3;
+                },
+              },
+            }}
             scopedSlots={{
               default: (i) => this.$scopedSlots.default(i),
             }}
