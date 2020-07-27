@@ -11,13 +11,10 @@ import {
   ResponseSearchSuggest,
 } from "@/services/Response";
 import ScrollView from "@/common/components/scrollview";
-import Tabs from "@/common/components/tabs";
-import Sliders from "@/common/components/swiper";
+import NavsSlider from "@/components/NavsSlider";
 import Loading from "@/components/Loading";
 import { getStore, setStore } from "@/common/Utils";
 import { Debounce } from "@/common/Decorator";
-import { divide } from "lodash";
-import { Pages } from "@/router";
 
 enum SearchPageStatus {
   DEFAULT = "default",
@@ -322,8 +319,8 @@ export default class Search extends tsx<any> {
     );
   }
 
+  //resultPage Data
   private resultActive: number = 0;
-
   private resultNavs: { id: number; name: string; pagesCount?: number }[] = [
     { id: 1018, name: "综合" },
     { id: 1, name: "单曲" },
@@ -334,67 +331,23 @@ export default class Search extends tsx<any> {
     { id: 1014, name: "视频" },
   ]; //默认为 1 即单曲 , 取值意义 : 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合
 
-  @Ref("result-nav-scroll")
-  private readonly resultNavScroll!: ScrollView;
-
-  @Watch("resultActive")
-  @Watch("$state.resizeCount") //横竖屏变化
-  protected fixedCurrentNav2Center() {
-    if (this.pageStatus != SearchPageStatus.RESULT) return;
-    const $container = this.$el.querySelector(".navs-container");
-    const $lis = $container.querySelectorAll(".navs-container .tabs-item");
-    const container = $container.getBoundingClientRect();
-    const start = $lis[0].getBoundingClientRect();
-    const current = $lis[this.resultActive].getBoundingClientRect();
-    const center2Start = current.x - start.x + current.width / 2; //当前元素中点距离起点的距离。
-    let translate = -center2Start + container.width / 2;
-    const swiper = this.resultNavScroll.swiperScroll;
-    translate = Math.min(swiper.minTranslate(), translate);
-    translate = Math.max(swiper.maxTranslate(), translate);
-    setTimeout(() => {
-      this.resultNavScroll.scrollTo(translate, 300);
-    }, 100);
-  }
-
   private renderResult() {
     return (
       <div class="search-page-result">
-        <div class="navs-container">
-          <ScrollView
-            ref="result-nav-scroll"
-            options={{
-              direction: "horizontal",
-              slidesPerView: "auto",
-              freeMode: true,
-              mousewheel: false,
-              freeModeMomentumBounce: false,
-            }}
-          >
-            <Tabs
-              v-model={this.resultActive}
-              length={this.resultNavs.length}
-              scopedSlots={{
-                default: ({ i, isActive }) =>
-                  this.resultNavs.map(({ name }) => (
-                    <div>
-                      <span> {name}</span>
-                    </div>
-                  ))[i],
-              }}
-            />
-          </ScrollView>
-        </div>
-        <div class="contents-container">
-          <Sliders
-            v-model={this.resultActive}
-            length={this.resultNavs.length}
-            options={{}}
-            scopedSlots={{
-              default: (i) =>
-                this.resultNavs.map(({ name }) => <span> {name}</span>)[i],
-            }}
-          />
-        </div>
+        <NavsSlider
+          v-model={this.resultActive}
+          length={this.resultNavs.length}
+          scopedSlots={{
+            nav: ({ i, isActive }) =>
+              this.resultNavs.map(({ name }) => (
+                <div>
+                  <span> {name}</span>
+                </div>
+              ))[i],
+            default: (i) =>
+              this.resultNavs.map(({ name }) => <span> {name}</span>)[i],
+          }}
+        />
       </div>
     );
   }
