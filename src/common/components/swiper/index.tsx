@@ -85,6 +85,9 @@ export default class MySwiper extends tsx<
   @Emit("change")
   private onSlideChangeTransitionEnd(active: number) {}
 
+  @Emit("change")
+  private onSlideChangeTransitionStart(active: number) {}
+
   public updateScroll() {
     if (this.options.loop) {
       //更新loop模式克隆的节点；开启loop模式 后如果slide变更后，update方法不会重新创建更新loop的克隆节点，源码分析 loopDestroy loopCreate updateSlides 即可
@@ -104,6 +107,9 @@ export default class MySwiper extends tsx<
         }}
         onSlideChangeTransitionEnd={() => {
           this.onSlideChangeTransitionEnd(this.swiperInstance.activeIndex);
+        }}
+        onSlideChangeTransitionStart={() => {
+          this.onSlideChangeTransitionStart(this.swiperInstance.activeIndex);
         }}
         options={{
           ...this.options,

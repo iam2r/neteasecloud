@@ -87,7 +87,6 @@ export default class Search extends tsx<any> {
     newVal: SearchPageStatus,
     oldVal: SearchPageStatus
   ) {
-    console.log(newVal, oldVal);
     if (newVal == SearchPageStatus.DEFAULT) {
       this.searchValue = "";
       this.querySearchAdvice();
@@ -354,7 +353,7 @@ export default class Search extends tsx<any> {
     translate = Math.max(swiper.maxTranslate(), translate);
     setTimeout(() => {
       this.resultNavScroll.scrollTo(translate, 300);
-    });
+    }, 100);
   }
 
   private renderResult() {
@@ -368,7 +367,7 @@ export default class Search extends tsx<any> {
               slidesPerView: "auto",
               freeMode: true,
               mousewheel: false,
-              freeModeMomentumBounce: context.device.desktop ? true : false,
+              freeModeMomentumBounce: false,
             }}
           >
             <Tabs

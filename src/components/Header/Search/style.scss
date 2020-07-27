@@ -352,7 +352,7 @@
         }
       }
       .contents-container {
-        flex: 1 0 auto;
+        height: calc(100% - #{$navsHeight});
         > .swiper-container {
           height: 100%;
         }
