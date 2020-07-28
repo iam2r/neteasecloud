@@ -15,6 +15,7 @@ import NavsSlider from "@/components/NavsSlider";
 import Loading from "@/components/Loading";
 import { getStore, setStore } from "@/common/Utils";
 import { Debounce } from "@/common/Decorator";
+import { divide } from "lodash";
 
 enum SearchPageStatus {
   DEFAULT = "default",
@@ -346,7 +347,19 @@ export default class Search extends tsx<any> {
                 </div>
               ))[i],
             default: (i) =>
-              this.resultNavs.map(({ name }) => <span> {name}</span>)[i],
+              this.resultNavs.map(({ name }, i) => (
+                <ScrollView
+                  class="search-result-item-swiper"
+                  key={name}
+                  scopedSlots={{
+                    default: () => (
+                      <div class="search-result-item-scroller" data-type={i}>
+                        {name}
+                      </div>
+                    ),
+                  }}
+                />
+              ))[i],
           }}
         />
       </div>
