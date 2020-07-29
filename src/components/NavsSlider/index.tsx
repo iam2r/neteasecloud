@@ -60,7 +60,6 @@ export default class NavsSlider extends tsx<
 
   @Watch("active")
   protected doScroll() {
-    this.navLineWidth = this.currentScrollData.navLineWidth;
     setTimeout(() => {
       this.navScroll.scrollTo(this.currentScrollData.tabTransform, 300);
     }, 100);
@@ -81,7 +80,7 @@ export default class NavsSlider extends tsx<
       const swiper = this.navScroll.swiperScroll;
       tabTransform = Math.min(swiper.minTranslate(), tabTransform);
       tabTransform = Math.max(swiper.maxTranslate(), tabTransform);
-      console.log({ tabTransform, navLineTransform, navLineWidth });
+
       this.$set(this.scrollData, index, {
         tabTransform,
         navLineTransform,
@@ -91,23 +90,32 @@ export default class NavsSlider extends tsx<
     this.doScroll();
   }
 
-  private onSetTranslate(swiper, translate) {
-    const min = this.scrollData[0].navLineTransform;
-    const max = this.scrollData[this.scrollData.length - 1].navLineTransform;
-    let progress = swiper.progress;
-    return (this.navLineTransform = min + (max - min) * progress);
+  private onSetTranslate(swiper) {
+    const progress = swiper.progress;
     if (progress <= 0 || progress >= 1) {
-      return (this.navLineTransform = min + (max - min) * progress);
+      //线性
+      const min = this.scrollData[0];
+      const max = this.scrollData[this.scrollData.length - 1];
+      this.navLineWidth = this.navLineWidth =
+        progress <= 0 ? min.navLineWidth : max.navLineWidth;
+      return (this.navLineTransform =
+        min.navLineTransform +
+        (max.navLineTransform - min.navLineTransform) * progress);
     } else {
       const region = Math.floor(
         swiper.progress / (1 / (this.scrollData.length - 1))
       );
-      const start = this.scrollData[region].navLineTransform;
-      const end = this.scrollData[region + 1].navLineTransform;
-      const diff = end - start;
-      const ave = (max - min) / (this.scrollData.length - 1);
-      progress = progress % (1 / (this.scrollData.length - 1));
-      this.navLineTransform = start + ((diff - start) * progress * diff) / ave;
+      const start = this.scrollData[region];
+      const end = this.scrollData[region + 1];
+      const base = 1 / (this.scrollData.length - 1);
+      const oneProgress = (progress % base) / base;
+      const maxWidth = end.navLineTransform - start.navLineTransform;
+      this.navLineTransform = start.navLineTransform + maxWidth * oneProgress;
+      this.navLineWidth =
+        oneProgress < 0.5
+          ? start.navLineWidth +
+            (maxWidth - start.navLineWidth) * oneProgress * 2
+          : maxWidth + (end.navLineWidth - maxWidth) * (oneProgress - 0.5) * 2;
     }
   }
 
