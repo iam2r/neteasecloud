@@ -15,7 +15,6 @@ import NavsSlider from "@/components/NavsSlider";
 import Loading from "@/components/Loading";
 import { getStore, setStore } from "@/common/Utils";
 import { Debounce } from "@/common/Decorator";
-import { divide } from "lodash";
 
 enum SearchPageStatus {
   DEFAULT = "default",

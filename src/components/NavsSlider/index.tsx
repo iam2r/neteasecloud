@@ -1,11 +1,4 @@
-import {
-  Component,
-  Prop,
-  Emit,
-  Model,
-  Ref,
-  Watch,
-} from "vue-property-decorator";
+import { Component, Prop, Model, Ref, Watch } from "vue-property-decorator";
 import { Component as tsx } from "vue-tsx-support";
 import { VNode } from "vue";
 import "./styles.scss";
