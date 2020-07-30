@@ -55,7 +55,7 @@ export default class NavsSlider extends tsx<
   protected doScroll() {
     setTimeout(() => {
       this.navScroll.scrollTo(this.currentScrollData.tabTransform, 300);
-    }, 100);
+    }, 150);
   }
 
   @Watch("$state.resizeCount") //横竖屏变化,pc resize就会触发
