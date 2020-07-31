@@ -1,7 +1,6 @@
 import EventEmitter from "@/common/EventEmitter";
 import Animation from "@/common/Animation";
 import device, { DeviceOrientation } from "current-device";
-device.onChangeOrientation;
 export type VisibilityType = "visible" | "hidden";
 
 export default class BrowsersHack extends EventEmitter {
