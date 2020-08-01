@@ -104,18 +104,15 @@ export default class Animation<
     const startTime = this.getNow(),
       destTime = startTime + duration,
       start = JSON.parse(JSON.stringify(this.target));
-    const rAF =
+    const raf =
       window.requestAnimationFrame ||
-      (window as any).webkitRequestAnimationFrame ||
-      (window as any).mozRequestAnimationFrame ||
-      (window as any).oRequestAnimationFrame ||
-      (window as any).msRequestAnimationFrame ||
-      function (callback) {
-        window.setTimeout(callback, 1000 / 60);
-      };
+      window.requestAnimationFrame.bind(window) ||
+      ((fn) => {
+        setTimeout(fn, 1000 / 60);
+      });
+
     const step = () => {
       const now = this.getNow();
-
       if (now >= destTime) {
         this.setTarget((key) => end[key]);
         this.isAnimating = false;
@@ -128,7 +125,7 @@ export default class Animation<
       this.setTarget((key) => (end[key] - start[key]) * easing + start[key]);
       this.emit("update", this.target);
       if (this.isAnimating) {
-        rAF(step);
+        raf(step);
       }
     };
     this.isAnimating = true;
