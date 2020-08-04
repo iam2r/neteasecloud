@@ -4,7 +4,6 @@ import device, { DeviceOrientation } from "current-device";
 export type VisibilityType = "visible" | "hidden";
 
 export default class BrowsersHack extends EventEmitter {
-  private lastTouchEnd: number = 0;
   private isWinPlatForm: boolean = /^Win\w+/.test(navigator.platform);
   private innerHeightStore: number = innerHeight;
   private innerHeightWatchRaf: number;
@@ -98,14 +97,6 @@ export default class BrowsersHack extends EventEmitter {
     }
   }
 
-  private stopDoubleClick(e: Event | TouchEvent) {
-    const now = +new Date();
-    if (now - this.lastTouchEnd <= 300) {
-      e.preventDefault();
-    }
-    this.lastTouchEnd = now;
-  }
-
   private initEvents(remove?: boolean) {
     const eventType = remove
       ? (el: any, type: string, fn: any, options?: any) => {
@@ -117,11 +108,9 @@ export default class BrowsersHack extends EventEmitter {
 
     eventType(window, "touchstart", this, { passive: false });
     eventType(window, "touchend", this);
-    eventType(window, "touchcancel", this);
     eventType(window, "resize", this);
     eventType(window, "orientationchange", this);
-    eventType(window, "gesturestart", this);
-    eventType(window, "dblclick", this);
+    eventType(document, "click", this, true);
     eventType(document, this.visibility.visibilityChange, this); //用document兼容IE
   }
 
@@ -202,29 +191,62 @@ export default class BrowsersHack extends EventEmitter {
     watchInnerHeight();
   }
 
+  private onClick(e: any) {
+    if (!e._constructed) {
+      //禁用body的点击事件的默认事件，防止放大，然后手动dispatch该事件。
+      e.preventDefault();
+      e.stopPropagation();
+      this.doClick(e);
+    }
+  }
+
+  private doClick(e: any) {
+    let ev: any;
+    const target = e.target,
+      uploadFile =
+        /INPUT/.test(target.tagName) && target.getAttribute("type") == "file";
+    if (!/(SELECT|INPUT|TEXTAREA)/i.test(target.tagName) || uploadFile) {
+      ev = document.createEvent("MouseEvents");
+      ev.initMouseEvent(
+        "click",
+        true,
+        true,
+        e.view,
+        1,
+        target.screenX,
+        target.screenY,
+        target.clientX,
+        target.clientY,
+        e.ctrlKey,
+        e.altKey,
+        e.shiftKey,
+        e.metaKey,
+        0,
+        null
+      );
+
+      ev._constructed = true;
+      target.dispatchEvent(ev);
+    }
+  }
+
   protected handleEvent(e: Event | TouchEvent) {
     switch (e.type) {
       case "touchstart":
         this.stopMultiFinger(e);
         break;
       case "touchend":
-      case "touchcancel":
         if (this.isWinPlatForm) return;
         if (device.mobile() && device.android()) {
           this.onTouchFullScreen();
-        }
-        if (device.mobile() && device.ios()) {
-          this.stopDoubleClick(e);
         }
         break;
       case "resize":
       case "orientationchange":
         this.onResize();
         break;
-
-      case "gesturestart":
-      case "dblclick":
-        e.preventDefault();
+      case "click":
+        this.onClick(e);
         break;
       case this.visibility.visibilityChange:
         this.emit<[VisibilityType]>(
