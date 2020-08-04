@@ -15,6 +15,7 @@ import NavsSlider from "@/components/NavsSlider";
 import Loading from "@/components/Loading";
 import { getStore, setStore } from "@/common/Utils";
 import { Debounce } from "@/common/Decorator";
+import { divide } from "lodash";
 
 enum SearchPageStatus {
   DEFAULT = "default",
@@ -59,10 +60,25 @@ export default class Search extends tsx<any> {
     this.searchAdvice = res.data;
   }
   private async querySearch() {
+    const currentActive = this.resultActive;
+    const currentData = this.resultNavs[currentActive];
+    if (!currentData.hasMore) return;
     const req = new ResquestSearch();
+    req.limit = 30;
     req.keywords = this.searchValue || this.searchAdvice.realkeyword;
+    req.type = currentData.id;
+    req.offset = (currentData.pagesCount - 1) * req.limit;
     this.promisePools.search = context.services.search(req);
     const res = await this.promisePools.search;
+    this.resultNavs[currentActive].result =
+      currentData.key == "all"
+        ? res.result
+        : [...(currentData.result || []), ...res.result[currentData.key]];
+    this.resultNavs[currentActive].hasMore = res.result.hasMore || false;
+    this.resultNavs[currentActive].pagesCount += this.resultNavs[currentActive]
+      .hasMore
+      ? 1
+      : 0;
     this.addHistory(req.keywords);
   }
   private async querySearchHotDetail() {
@@ -169,6 +185,7 @@ export default class Search extends tsx<any> {
 
   private toResult(keywords?: string) {
     keywords && (this.searchValue = keywords);
+    this.resultActive = 1;
     this.$nextTick(() => {
       this.pageStatus = SearchPageStatus.RESULT;
     });
@@ -321,18 +338,108 @@ export default class Search extends tsx<any> {
 
   //resultPage Data
   private resultActive: number = 0;
-  private resultNavs: { id: number; name: string; pagesCount?: number }[] = [
-    { id: 1018, name: "综合" },
-    { id: 1, name: "单曲" },
-    { id: 10, name: "专辑" },
-    { id: 100, name: "歌手" },
-    { id: 1000, name: "歌单" },
-    { id: 1002, name: "用户" },
-    { id: 1006, name: "歌词" },
-    { id: 1014, name: "视频" },
+  private resultNavs: {
+    id: number;
+    name: string;
+    pagesCount?: number;
+    hasMore: boolean;
+    result: any;
+    key: string;
+  }[] = [
+    {
+      id: 1018,
+      name: "综合",
+      pagesCount: 1,
+      hasMore: true,
+      result: null,
+      key: "all",
+    },
+    {
+      id: 1,
+      name: "单曲",
+      pagesCount: 1,
+      hasMore: true,
+      result: null,
+      key: "songs",
+    },
+    {
+      id: 10,
+      name: "专辑",
+      pagesCount: 1,
+      hasMore: true,
+      result: null,
+      key: "albums",
+    },
+    {
+      id: 100,
+      name: "歌手",
+      pagesCount: 1,
+      hasMore: true,
+      result: null,
+      key: "artists",
+    },
+    {
+      id: 1000,
+      name: "歌单",
+      pagesCount: 1,
+      hasMore: true,
+      result: null,
+      key: "playlists",
+    },
+    {
+      id: 1002,
+      name: "用户",
+      pagesCount: 1,
+      hasMore: true,
+      result: null,
+      key: "userprofiles",
+    },
+    {
+      id: 1006,
+      name: "歌词",
+      pagesCount: 1,
+      hasMore: true,
+      result: null,
+      key: "songs",
+    },
+    {
+      id: 1014,
+      name: "视频",
+      pagesCount: 1,
+      hasMore: true,
+      result: null,
+      key: "videos",
+    },
   ]; //默认为 1 即单曲 , 取值意义 : 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合
 
+  @Watch("resultActive")
+  protected onResultActiveChange() {
+    this.querySearch();
+  }
+
   private renderResult() {
+    const result1 = () => (
+      <div class="result1">
+        {this.resultNavs[this.resultActive].result && (
+          <ul>
+            {this.resultNavs[this.resultActive].result.map(({ id, name }) => (
+              <li>{name}</li>
+            ))}
+          </ul>
+        )}
+        <promised
+          class="loading-box"
+          promise={this.promisePools.search}
+          scopedSlots={{
+            combined: ({ isPending, isDelayOver, data, error }) => [
+              data && <div></div>,
+              isPending && <Loading />,
+            ],
+          }}
+        />
+      </div>
+    );
+
     return (
       <div class="search-page-result">
         <NavsSlider
@@ -353,7 +460,15 @@ export default class Search extends tsx<any> {
                   scopedSlots={{
                     default: () => (
                       <div class="search-result-item-scroller" data-type={i}>
-                        {name}
+                        {(() => {
+                          switch (i) {
+                            case 1:
+                              return result1();
+
+                            default:
+                              return name;
+                          }
+                        })()}
                       </div>
                     ),
                   }}

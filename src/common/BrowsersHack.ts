@@ -117,6 +117,7 @@ export default class BrowsersHack extends EventEmitter {
   private checkRootElementScroll(newOrientation: DeviceOrientation) {
     if (newOrientation == "portrait") {
       setTimeout(() => {
+        window.scrollTo(0, 0);
         document.documentElement.scrollTop = 0;
       }, 300);
     }
