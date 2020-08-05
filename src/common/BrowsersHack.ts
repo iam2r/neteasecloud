@@ -192,43 +192,15 @@ export default class BrowsersHack extends EventEmitter {
     watchInnerHeight();
   }
 
-  private onClick(e: any) {
-    if (!e._constructed) {
-      //禁用body的点击事件的默认事件，防止放大，然后手动dispatch该事件。
+  private preventDoubleClick(e: any) {
+    const target: any = e.target;
+    const now = +new Date();
+    const lastTime = target.lastTime || now;
+    if (now - lastTime <= 300) {
+      console.log("dblclick");
       e.preventDefault();
-      e.stopPropagation();
-      this.doClick(e);
     }
-  }
-
-  private doClick(e: any) {
-    let ev: any;
-    const target = e.target,
-      uploadFile =
-        /INPUT/.test(target.tagName) && target.getAttribute("type") == "file";
-    if (!/(SELECT|INPUT|TEXTAREA)/i.test(target.tagName) || uploadFile) {
-      ev = document.createEvent("MouseEvents");
-      ev.initMouseEvent(
-        "click",
-        true,
-        true,
-        e.view,
-        1,
-        target.screenX,
-        target.screenY,
-        target.clientX,
-        target.clientY,
-        e.ctrlKey,
-        e.altKey,
-        e.shiftKey,
-        e.metaKey,
-        0,
-        null
-      );
-
-      ev._constructed = true;
-      target.dispatchEvent(ev);
-    }
+    target.lastTime = now;
   }
 
   protected handleEvent(e: Event | TouchEvent) {
@@ -247,7 +219,9 @@ export default class BrowsersHack extends EventEmitter {
         this.onResize();
         break;
       case "click":
-        this.onClick(e);
+        if (device.mobile() && device.ios()) {
+          this.preventDoubleClick(e);
+        }
         break;
       case this.visibility.visibilityChange:
         this.emit<[VisibilityType]>(
