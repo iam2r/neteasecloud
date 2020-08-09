@@ -320,6 +320,32 @@
           justify-content: center;
           font-size: 50px;
           color: white;
+          .result1 {
+            width: 100%;
+            ul {
+              li {
+                display: flex;
+                padding-left: 26px;
+                .keywords {
+                  color: #4a73a0;
+                }
+                .content {
+                  width: 100%;
+                  padding-top: 18px;
+                  padding-bottom: 15px;
+                  display: flex;
+                  font-size: 20px;
+                  border-bottom: 1px solid #2c2c2c;
+                  line-height: 38px;
+                  .group {
+                    .name-box {
+                      font-size: 28px;
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
         > .swiper-scrollbar {
           height: calc(100% - #{$footerHeight} - 2%);

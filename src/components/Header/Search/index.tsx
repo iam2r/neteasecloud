@@ -59,13 +59,18 @@ export default class Search extends tsx<any> {
     const res = await this.promisePools.searchAdvice;
     this.searchAdvice = res.data;
   }
+
+  private get keywords() {
+    return this.searchValue || this.searchAdvice.realkeyword;
+  }
+
   private async querySearch() {
     const currentActive = this.resultActive;
     const currentData = this.resultNavs[currentActive];
     if (!currentData.hasMore) return;
     const req = new ResquestSearch();
     req.limit = 30;
-    req.keywords = this.searchValue || this.searchAdvice.realkeyword;
+    req.keywords = this.keywords;
     req.type = currentData.id;
     req.offset = (currentData.pagesCount - 1) * req.limit;
     this.promisePools.search = context.services.search(req);
@@ -417,14 +422,58 @@ export default class Search extends tsx<any> {
     this.querySearch();
   }
 
+  private formatKeywords(content: string): string {
+    return content.replace(
+      new RegExp(this.keywords, "g"),
+      `<span class='keywords'>${this.keywords}</span>`
+    );
+  }
+
   private renderResult() {
     const result1 = () => (
       <div class="result1">
         {this.resultNavs[this.resultActive].result && (
           <ul>
-            {this.resultNavs[this.resultActive].result.map(({ id, name }) => (
-              <li>{name}</li>
-            ))}
+            {this.resultNavs[this.resultActive].result.map(
+              ({ id, name, artists, album, alias }, i) => (
+                <li key={id + "-" + i}>
+                  <div class="check-box">
+                    <i></i>
+                  </div>
+                  <div class="content">
+                    <div class="group">
+                      <section
+                        class="name-box"
+                        domPropsInnerHTML={this.formatKeywords(name)}
+                      ></section>
+                      <section>
+                        <div class="status"></div>
+                        <div class="artists-list">
+                          <span
+                            domPropsInnerHTML={this.formatKeywords(
+                              artists.map(({ name }) => name).join("/")
+                            )}
+                          ></span>
+                          <span> - </span>
+                          <span
+                            domPropsInnerHTML={this.formatKeywords(album.name)}
+                          ></span>
+                        </div>
+                      </section>
+                      {alias.map((alia) => (
+                        <section
+                          domPropsInnerHTML={this.formatKeywords(alia)}
+                        ></section>
+                      ))}
+                    </div>
+                    <div class="menus">
+                      <span>video</span>
+                      <span>more</span>
+                    </div>
+                  </div>
+                </li>
+              )
+            )}
           </ul>
         )}
         <promised
