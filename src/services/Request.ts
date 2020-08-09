@@ -10,3 +10,8 @@ export class ResquestSearchSuggest extends IRequest {
   keywords: string;
   type?: "mobile"; //如果传 'mobile' 则返回移动端数据
 }
+
+export class ResquestCheckMusic extends IRequest {
+  id: string;
+  br?: number = 999000;
+}

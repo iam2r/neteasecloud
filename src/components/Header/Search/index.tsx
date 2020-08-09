@@ -83,7 +83,6 @@ export default class Search extends tsx<any> {
     req.offset = (currentData.pagesCount - 1) * req.limit;
     this.promisePools.search = new Promise(async (reslove, reject) => {
       const res = await (context.services.search(req) as any);
-
       this.resultNavs[currentActive].result =
         currentData.key == "all"
           ? res.result
@@ -494,7 +493,11 @@ export default class Search extends tsx<any> {
           scopedSlots={{
             combined: ({ isPending, isDelayOver, data, error }) => [
               data && <div></div>,
-              isPending && <Loading />,
+              isPending && (
+                <Loading
+                  class={!this.resultNavs[index].result ? "no-data" : ""}
+                />
+              ),
             ],
           }}
         />

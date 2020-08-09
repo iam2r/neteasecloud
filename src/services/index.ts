@@ -1,5 +1,9 @@
 import Services, { IRequest, IResponse, IError } from "@/common/Services";
-import { ResquestSearch, ResquestSearchSuggest } from "./Request";
+import {
+  ResquestSearch,
+  ResquestSearchSuggest,
+  ResquestCheckMusic,
+} from "./Request";
 import {
   ResponseSearchAdvice,
   ResponseSearchHotDetail,
@@ -11,6 +15,7 @@ export enum Commond {
   Search = "search",
   SearchHot = "search/hot/detail",
   SearchSuggest = "search/suggest",
+  CheckMusic = "check/music",
 }
 
 export default class NetEaseServices extends Services {
@@ -47,6 +52,17 @@ export default class NetEaseServices extends Services {
     return this.send<IRequest, ResponseSearchHotDetail>(
       Commond.SearchHot,
       new IRequest(),
+      callback
+    );
+  }
+
+  public checkMusic(
+    req: ResquestCheckMusic,
+    callback?: (err: IError, res: IResponse) => void
+  ): Promise<IResponse> {
+    return this.send<ResquestCheckMusic, IResponse>(
+      Commond.CheckMusic,
+      req,
       callback
     );
   }
