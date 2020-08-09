@@ -64,6 +64,14 @@ export default class Search extends tsx<any> {
     return this.searchValue || this.searchAdvice.realkeyword;
   }
 
+  private resetResultNavs() {
+    this.resultActive = 1;
+    this.resultNavs.forEach((item) => {
+      item.pagesCount = 1;
+      item.result = null;
+    });
+  }
+
   private async querySearch() {
     const currentActive = this.resultActive;
     const currentData = this.resultNavs[currentActive];
@@ -73,17 +81,21 @@ export default class Search extends tsx<any> {
     req.keywords = this.keywords;
     req.type = currentData.id;
     req.offset = (currentData.pagesCount - 1) * req.limit;
-    this.promisePools.search = context.services.search(req);
-    const res = await this.promisePools.search;
-    this.resultNavs[currentActive].result =
-      currentData.key == "all"
-        ? res.result
-        : [...(currentData.result || []), ...res.result[currentData.key]];
-    this.resultNavs[currentActive].hasMore = res.result.hasMore || false;
-    this.resultNavs[currentActive].pagesCount += this.resultNavs[currentActive]
-      .hasMore
-      ? 1
-      : 0;
+    this.promisePools.search = new Promise(async (reslove, reject) => {
+      const res = await (context.services.search(req) as any);
+
+      this.resultNavs[currentActive].result =
+        currentData.key == "all"
+          ? res.result
+          : [...(currentData.result || []), ...res.result[currentData.key]];
+      this.resultNavs[currentActive].hasMore = res.result.hasMore || false;
+      this.resultNavs[currentActive].pagesCount += this.resultNavs[
+        currentActive
+      ].hasMore
+        ? 1
+        : 0;
+      reslove(res);
+    });
     this.addHistory(req.keywords);
   }
   private async querySearchHotDetail() {
@@ -120,6 +132,7 @@ export default class Search extends tsx<any> {
     }
 
     if (newVal == SearchPageStatus.RESULT) {
+      this.resetResultNavs();
       this.querySearch();
     }
   }
@@ -190,7 +203,6 @@ export default class Search extends tsx<any> {
 
   private toResult(keywords?: string) {
     keywords && (this.searchValue = keywords);
-    this.resultActive = 1;
     this.$nextTick(() => {
       this.pageStatus = SearchPageStatus.RESULT;
     });
@@ -419,6 +431,9 @@ export default class Search extends tsx<any> {
 
   @Watch("resultActive")
   protected onResultActiveChange() {
+    const currentActive = this.resultActive;
+    const currentData = this.resultNavs[currentActive];
+    if (currentData.result) return;
     this.querySearch();
   }
 
@@ -430,11 +445,11 @@ export default class Search extends tsx<any> {
   }
 
   private renderResult() {
-    const result1 = () => (
+    const result1 = (index: number) => (
       <div class="result1">
-        {this.resultNavs[this.resultActive].result && (
+        {this.resultNavs[index].result && (
           <ul>
-            {this.resultNavs[this.resultActive].result.map(
+            {this.resultNavs[index].result.map(
               ({ id, name, artists, album, alias }, i) => (
                 <li key={id + "-" + i}>
                   <div class="check-box">
@@ -466,10 +481,7 @@ export default class Search extends tsx<any> {
                         ></section>
                       ))}
                     </div>
-                    <div class="menus">
-                      <span>video</span>
-                      <span>more</span>
-                    </div>
+                    <div class="menus"></div>
                   </div>
                 </li>
               )
@@ -512,7 +524,7 @@ export default class Search extends tsx<any> {
                         {(() => {
                           switch (i) {
                             case 1:
-                              return result1();
+                              return result1(i);
 
                             default:
                               return name;

@@ -102,6 +102,7 @@ export default class MySwiper extends tsx<
     return (
       <Swiper
         ref="mySwiper"
+        cleanup-styles-on-destroy={false}
         onSetTranslate={() => {
           this.onSetTranslate(this.swiperInstance.translate);
         }}
