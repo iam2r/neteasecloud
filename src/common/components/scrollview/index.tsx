@@ -69,7 +69,7 @@ export default class ScrollView extends tsx<
   private onSetTranslate(translate: number) {
     const diff = 50;
     const min = this.swiperScroll.minTranslate() + diff;
-    const max = this.swiperScroll.maxTranslate() - diff;
+    const max = this.swiperScroll.maxTranslate() - 10;
 
     if (translate >= max && translate <= 0) {
       this.pullStatus = "normal";
