@@ -12,6 +12,8 @@ export interface ScrollViewProps {
 
 export interface ScrollViewEvents {
   onSetTranslate?: (swiper: SwiperClass, translate?: number) => void;
+  onPullDown?: () => void;
+  onPullUp?: () => void;
 }
 
 export interface ScrollViewSlots {
@@ -49,6 +51,13 @@ export default class ScrollView extends tsx<
     return (this.$refs.mySwiper as any).$swiper;
   }
 
+  private pullStatus:
+    | "normal"
+    | "pull-down-to-refresh"
+    | "release-to-refresh"
+    | "pullDown"
+    | "pullUp" = "normal";
+
   @Watch("$state.resizeCount")
   protected onResize() {
     setTimeout(() => {
@@ -57,7 +66,31 @@ export default class ScrollView extends tsx<
   }
 
   @Emit("setTranslate")
-  private onSetTranslate(translate: number) {}
+  private onSetTranslate(translate: number) {
+    const diff = 50;
+    const min = this.swiperScroll.minTranslate() + diff;
+    const max = this.swiperScroll.maxTranslate() - diff;
+
+    if (translate >= max && translate <= 0) {
+      this.pullStatus = "normal";
+    } else if (translate > 0 && translate < min) {
+      this.pullStatus = "pull-down-to-refresh";
+    } else if (translate >= min) {
+      this.pullStatus = "release-to-refresh";
+    } else {
+      this.pullStatus = "pullUp";
+      this.$emit(this.pullStatus);
+    }
+  }
+
+  private onTouchEnd(translate: number) {
+    const diff = 50;
+    const min = this.swiperScroll.minTranslate() + diff;
+    if (translate >= min) {
+      this.pullStatus = "pullDown";
+      this.$emit(this.pullStatus);
+    }
+  }
 
   protected mounted() {
     this.initClickHandel();
@@ -135,6 +168,9 @@ export default class ScrollView extends tsx<
         class="scroll-container"
         onSetTranslate={() => {
           this.onSetTranslate(this.swiperScroll.getTranslate());
+        }}
+        onTouchEnd={() => {
+          this.onTouchEnd(this.swiperScroll.getTranslate());
         }}
         options={{
           ...this.options,

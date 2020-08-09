@@ -4,7 +4,7 @@ import device, { DeviceOrientation } from "current-device";
 export type VisibilityType = "visible" | "hidden";
 
 export default class BrowsersHack extends EventEmitter {
-  private isWinPlatForm: boolean = /^Win\w+/.test(navigator.platform);
+  private isPlatForm: boolean = /^(Win|Mac)\w+/.test(navigator.platform);
   private innerHeightStore: number = innerHeight;
   private innerHeightWatchRaf: number;
   public browser: {
@@ -166,7 +166,7 @@ export default class BrowsersHack extends EventEmitter {
       device.mobile() &&
       device.ios() &&
       device.iphone() &&
-      !this.isWinPlatForm
+      !this.isPlatForm
     ) {
       this.checkRootElementScroll(newOrientation);
       this.checkPushNavBar(newOrientation, height);
@@ -209,7 +209,7 @@ export default class BrowsersHack extends EventEmitter {
         this.stopMultiFinger(e);
         break;
       case "touchend":
-        if (this.isWinPlatForm) return;
+        if (this.isPlatForm) return;
         if (device.mobile() && device.android()) {
           this.onTouchFullScreen();
         }

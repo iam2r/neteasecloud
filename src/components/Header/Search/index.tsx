@@ -75,7 +75,8 @@ export default class Search extends tsx<any> {
   private async querySearch() {
     const currentActive = this.resultActive;
     const currentData = this.resultNavs[currentActive];
-    if (!currentData.hasMore) return;
+    if (!currentData.hasMore || ~this.resultQuerying) return;
+    this.resultQuerying = currentActive;
     const req = new ResquestSearch();
     req.limit = 30;
     req.keywords = this.keywords;
@@ -83,6 +84,7 @@ export default class Search extends tsx<any> {
     req.offset = (currentData.pagesCount - 1) * req.limit;
     this.promisePools.search = new Promise(async (reslove, reject) => {
       const res = await (context.services.search(req) as any);
+      this.resultQuerying = -1;
       this.resultNavs[currentActive].result =
         currentData.key == "all"
           ? res.result
@@ -354,6 +356,7 @@ export default class Search extends tsx<any> {
 
   //resultPage Data
   private resultActive: number = 0;
+  private resultQuerying: number = -1;
   private resultNavs: {
     id: number;
     name: string;
@@ -521,6 +524,9 @@ export default class Search extends tsx<any> {
                 <ScrollView
                   class="search-result-item-swiper"
                   key={name}
+                  onPullUp={() => {
+                    this.querySearch();
+                  }}
                   scopedSlots={{
                     default: () => (
                       <div class="search-result-item-scroller" data-type={i}>
