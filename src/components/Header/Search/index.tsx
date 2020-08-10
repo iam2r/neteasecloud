@@ -365,6 +365,7 @@ export default class Search extends tsx<any> {
     hasMore: boolean;
     result: any;
     key: string;
+    [key: string]: any;
   }[] = [
     {
       id: 1018,
@@ -381,6 +382,7 @@ export default class Search extends tsx<any> {
       hasMore: true,
       result: null,
       key: "songs",
+      isEditting: false,
     },
     {
       id: 10,
@@ -452,12 +454,27 @@ export default class Search extends tsx<any> {
       <div class="result1">
         {this.resultNavs[index].result && (
           <ul>
+            <li class="tools-box">
+              {this.resultNavs[index].isEditting && (
+                <div class="check-box">
+                  <i> </i>
+                </div>
+              )}
+
+              <div class="content">
+                <div class="group"></div>
+                <div class="menus"></div>
+              </div>
+            </li>
             {this.resultNavs[index].result.map(
               ({ id, name, artists, album, alias }, i) => (
                 <li key={id + "-" + i}>
-                  <div class="check-box">
-                    <i></i>
-                  </div>
+                  {this.resultNavs[index].isEditting && (
+                    <div class="check-box">
+                      <i></i>
+                    </div>
+                  )}
+
                   <div class="content">
                     <div class="group">
                       <section

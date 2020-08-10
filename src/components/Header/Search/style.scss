@@ -321,6 +321,12 @@
           color: white;
           .loading-component {
             margin: 20px 0;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            > span {
+              margin-left: 10px;
+            }
           }
 
           .result1 {
@@ -330,6 +336,9 @@
                 display: flex;
                 padding-left: 26px;
                 min-height: 118px;
+                &.tools-box {
+                  height: 99px;
+                }
                 .keywords {
                   color: #4a73a0;
                 }
