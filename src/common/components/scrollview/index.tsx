@@ -92,7 +92,11 @@ export default class ScrollView extends tsx<
     } else if (translate >= min) {
       this.pullStatus = "release-to-refresh";
     } else {
-      if (!this.loading && this.loading != undefined) {
+      if (
+        !this.loading &&
+        this.loading != undefined &&
+        this.pullStatus != "pullUp"
+      ) {
         this.pullStatus = "pullUp";
         this.onPullUp();
         this.$nextTick(() => {
@@ -106,7 +110,7 @@ export default class ScrollView extends tsx<
     const diff = 50;
     const min = this.swiperScroll.minTranslate() + diff;
     if (translate >= min) {
-      if (!this.loading) {
+      if (!this.loading && this.pullStatus != "pullDown") {
         this.pullStatus = "pullDown";
         this.onPullDown();
       }

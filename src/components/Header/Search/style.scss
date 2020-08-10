@@ -332,15 +332,58 @@
           .result1 {
             width: 100%;
             ul {
+              &[data-status="editting"] {
+                li {
+                  .content {
+                    padding-left: 12px;
+                  }
+                }
+              }
               li {
                 display: flex;
                 padding-left: 26px;
                 min-height: 118px;
+                cursor: pointer;
                 &.tools-box {
                   height: 99px;
+                  .content {
+                    font-size: 34px;
+                    padding-left: 0 !important;
+                    .to-playslist {
+                      cursor: pointer;
+                    }
+                    .menus {
+                      .to-edit {
+                        cursor: pointer;
+                        font-size: 30px;
+                      }
+
+                      .quit-edit {
+                        cursor: pointer;
+                        color: #ff3a3a;
+                      }
+                    }
+                  }
                 }
                 .keywords {
                   color: #4a73a0;
+                }
+                .check-box {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  margin-right: 16px;
+                  i {
+                    width: 45px;
+                    height: 45px;
+                    border-radius: 50%;
+                    border: 1px solid #646464;
+                    transition: background-color 0.3s, border-color 0.3s;
+                    &.active {
+                      background-color: #ff3a3a;
+                      border-color: #ff3a3a;
+                    }
+                  }
                 }
                 .content {
                   width: 100%;
@@ -351,6 +394,10 @@
                   justify-content: space-between;
                   padding-top: 15px;
                   padding-bottom: 12px;
+                  .menus {
+                    display: flex;
+                    align-items: center;
+                  }
                   .group {
                     display: flex;
                     flex-direction: column;

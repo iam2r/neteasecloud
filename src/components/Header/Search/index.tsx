@@ -15,7 +15,6 @@ import NavsSlider from "@/components/NavsSlider";
 import Loading from "@/components/Loading";
 import { getStore, setStore } from "@/common/Utils";
 import { Debounce } from "@/common/Decorator";
-import { divide } from "lodash";
 
 enum SearchPageStatus {
   DEFAULT = "default",
@@ -70,13 +69,22 @@ export default class Search extends tsx<any> {
     this.resultNavs.forEach((item) => {
       item.pagesCount = 1;
       item.result = null;
+      if (item.key == "songs") {
+        item.isEditting = false;
+        item.checkList = [];
+      }
     });
   }
 
   private async querySearch() {
     const currentActive = this.resultActive;
-    const currentData = this.resultNavs[currentActive];
-    if (!currentData.hasMore) return;
+    const currentData = JSON.parse(
+      JSON.stringify(this.resultNavs[currentActive])
+    );
+
+    if (!currentData.hasMore || ~this.resultQuerying)
+      return console.log("queryReturn");
+
     this.resultQuerying = currentActive;
     const req = new ResquestSearch();
     req.limit = 30;
@@ -89,13 +97,22 @@ export default class Search extends tsx<any> {
       this.resultNavs[currentActive].result =
         currentData.key == "all"
           ? res.result
-          : [...(currentData.result || []), ...res.result[currentData.key]];
+          : [
+              ...(currentData.result || []),
+              ...res.result[currentData.key],
+            ].reduce((pre, cur) => {
+              if (!~pre.findIndex((it) => it.id == cur.id)) {
+                pre.push(cur);
+              }
+              return pre;
+            }, []);
       this.resultNavs[currentActive].hasMore = res.result.hasMore || false;
       this.resultNavs[currentActive].pagesCount += this.resultNavs[
         currentActive
       ].hasMore
         ? 1
         : 0;
+      console.log(this.resultNavs[currentActive]);
       reslove(res);
     });
     this.addHistory(req.keywords);
@@ -383,6 +400,7 @@ export default class Search extends tsx<any> {
       result: null,
       key: "songs",
       isEditting: false,
+      checkList: [],
     },
     {
       id: 10,
@@ -453,25 +471,113 @@ export default class Search extends tsx<any> {
     const result1 = (index: number) => (
       <div class="result1">
         {this.resultNavs[index].result && (
-          <ul>
-            <li class="tools-box">
+          <ul data-status={this.resultNavs[index].isEditting ? "editting" : ""}>
+            <v-touch
+              tag="li"
+              class="tools-box"
+              onTap={(e) => {
+                if (
+                  this.$el.querySelector(".tools-box .menus").contains(e.target)
+                ) {
+                  return;
+                }
+                if (this.resultNavs[index].isEditting) {
+                  if (
+                    this.resultNavs[index].checkList.length ==
+                    this.resultNavs[index].result.length
+                  ) {
+                    this.resultNavs[index].checkList = [];
+                  } else {
+                    this.resultNavs[index].checkList = this.resultNavs[
+                      index
+                    ].result.map(({ id }) => id);
+                  }
+                } else {
+                }
+              }}
+            >
               {this.resultNavs[index].isEditting && (
                 <div class="check-box">
-                  <i> </i>
+                  <i
+                    class={[
+                      this.resultNavs[index].checkList.length >=
+                      this.resultNavs[index].result.length
+                        ? "active"
+                        : "",
+                    ]}
+                  >
+                    {" "}
+                  </i>
                 </div>
               )}
-
               <div class="content">
-                <div class="group"></div>
-                <div class="menus"></div>
+                <div class="group">
+                  {this.resultNavs[index].isEditting ? (
+                    <v-touch tag="span">全选</v-touch>
+                  ) : (
+                    <v-touch class="to-playslist">
+                      <i></i>
+                      <span>播放全部</span>
+                    </v-touch>
+                  )}
+                </div>
+                <div class="menus">
+                  {this.resultNavs[index].isEditting ? (
+                    <v-touch
+                      class="quit-edit"
+                      tag="span"
+                      onTap={(e) => {
+                        e.srcEvent.stopImmediatePropagation();
+                        this.resultNavs[index].isEditting = false;
+                        this.resultNavs[index].checkList = [];
+                      }}
+                    >
+                      完成
+                    </v-touch>
+                  ) : (
+                    <v-touch
+                      class="to-edit"
+                      onTap={(e) => {
+                        e.srcEvent.stopImmediatePropagation();
+                        this.resultNavs[index].isEditting = true;
+                      }}
+                    >
+                      <i></i>
+                      <span>多选</span>
+                    </v-touch>
+                  )}
+                </div>
               </div>
-            </li>
+            </v-touch>
             {this.resultNavs[index].result.map(
               ({ id, name, artists, album, alias }, i) => (
-                <li key={id + "-" + i}>
+                <v-touch
+                  tag="li"
+                  key={id}
+                  onTap={() => {
+                    if (this.resultNavs[index].isEditting) {
+                      const current = this.resultNavs[index].checkList.indexOf(
+                        id
+                      );
+
+                      if (~current) {
+                        this.resultNavs[index].checkList.splice(current, 1);
+                      } else {
+                        this.resultNavs[index].checkList.push(id);
+                      }
+                    } else {
+                    }
+                  }}
+                >
                   {this.resultNavs[index].isEditting && (
                     <div class="check-box">
-                      <i></i>
+                      <i
+                        class={[
+                          this.resultNavs[index].checkList.includes(id)
+                            ? "active"
+                            : "",
+                        ]}
+                      ></i>
                     </div>
                   )}
 
@@ -495,15 +601,18 @@ export default class Search extends tsx<any> {
                           ></span>
                         </div>
                       </section>
+                      <section>{id}</section>
                       {alias.map((alia) => (
                         <section
                           domPropsInnerHTML={this.formatKeywords(alia)}
                         ></section>
                       ))}
                     </div>
-                    <div class="menus"></div>
+                    {!this.resultNavs[index].isEditting && (
+                      <div class="menus"></div>
+                    )}
                   </div>
-                </li>
+                </v-touch>
               )
             )}
           </ul>
