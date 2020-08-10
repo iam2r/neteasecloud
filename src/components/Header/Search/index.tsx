@@ -66,6 +66,7 @@ export default class Search extends tsx<any> {
 
   private resetResultNavs() {
     this.resultActive = 1;
+    this.resultQuerying = -1;
     this.resultNavs.forEach((item) => {
       item.pagesCount = 1;
       item.result = null;
@@ -75,7 +76,7 @@ export default class Search extends tsx<any> {
   private async querySearch() {
     const currentActive = this.resultActive;
     const currentData = this.resultNavs[currentActive];
-    if (!currentData.hasMore || ~this.resultQuerying) return;
+    if (!currentData.hasMore) return;
     this.resultQuerying = currentActive;
     const req = new ResquestSearch();
     req.limit = 30;
@@ -524,6 +525,7 @@ export default class Search extends tsx<any> {
                 <ScrollView
                   class="search-result-item-swiper"
                   key={name}
+                  loading={this.resultQuerying == i}
                   onPullUp={() => {
                     this.querySearch();
                   }}

@@ -6,8 +6,11 @@ import SwiperClass, { SwiperOptions } from "swiper";
 import { VNode } from "vue";
 
 import "./style.scss";
+import { Debounce } from "@/common/Decorator";
 export interface ScrollViewProps {
   option?: any;
+  loading?: boolean;
+  scrollerClass?: string | { [key: string]: boolean };
 }
 
 export interface ScrollViewEvents {
@@ -45,7 +48,10 @@ export default class ScrollView extends tsx<
   })
   private options: ScrollViewProps["option"];
   @Prop({ default: "" })
-  private scrollerClass: string | { [key: string]: boolean };
+  private scrollerClass: ScrollViewProps["scrollerClass"];
+
+  @Prop({ default: false })
+  private loading: ScrollViewProps["loading"];
 
   public get swiperScroll(): any {
     return (this.$refs.mySwiper as any).$swiper;
@@ -65,6 +71,14 @@ export default class ScrollView extends tsx<
     }, 400);
   }
 
+  @Debounce(300)
+  @Emit("pullDown")
+  private onPullDown() {}
+
+  @Debounce(300)
+  @Emit("pullUp")
+  private onPullUp() {}
+
   @Emit("setTranslate")
   private onSetTranslate(translate: number) {
     const diff = 50;
@@ -78,8 +92,13 @@ export default class ScrollView extends tsx<
     } else if (translate >= min) {
       this.pullStatus = "release-to-refresh";
     } else {
-      this.pullStatus = "pullUp";
-      this.$emit(this.pullStatus);
+      if (!this.loading) {
+        this.pullStatus = "pullUp";
+        this.onPullUp();
+        this.$nextTick(() => {
+          this.scrollTo(this.swiperScroll.maxTranslate(), 100);
+        });
+      }
     }
   }
 
@@ -87,8 +106,10 @@ export default class ScrollView extends tsx<
     const diff = 50;
     const min = this.swiperScroll.minTranslate() + diff;
     if (translate >= min) {
-      this.pullStatus = "pullDown";
-      this.$emit(this.pullStatus);
+      if (!this.loading) {
+        this.pullStatus = "pullDown";
+        this.onPullDown();
+      }
     }
   }
 
