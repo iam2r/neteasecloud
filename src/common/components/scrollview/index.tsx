@@ -9,7 +9,7 @@ import "./style.scss";
 import { Debounce } from "@/common/Decorator";
 export interface ScrollViewProps {
   option?: any;
-  loading?: boolean;
+  loading?: boolean | undefined;
   scrollerClass?: string | { [key: string]: boolean };
 }
 
@@ -50,7 +50,7 @@ export default class ScrollView extends tsx<
   @Prop({ default: "" })
   private scrollerClass: ScrollViewProps["scrollerClass"];
 
-  @Prop({ default: false })
+  @Prop({ default: undefined })
   private loading: ScrollViewProps["loading"];
 
   public get swiperScroll(): any {
@@ -92,7 +92,7 @@ export default class ScrollView extends tsx<
     } else if (translate >= min) {
       this.pullStatus = "release-to-refresh";
     } else {
-      if (!this.loading) {
+      if (!this.loading && this.loading != undefined) {
         this.pullStatus = "pullUp";
         this.onPullUp();
         this.$nextTick(() => {
