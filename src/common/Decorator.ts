@@ -5,7 +5,7 @@ export const Debounce = (
     leading: true,
     trailing: false,
   }
-) => (target: Object, propertyKey: string | symbol, descriptor: any) => {
+) => (target: any, propertyKey: string | symbol, descriptor: any) => {
   descriptor.value = debounce(descriptor.value, wait, options);
   return descriptor;
 };
@@ -16,7 +16,7 @@ export const Throttle = (
     leading: true,
     trailing: true,
   }
-) => (target: Object, propertyKey: string | symbol, descriptor: any) => {
+) => (target: any, propertyKey: string | symbol, descriptor: any) => {
   descriptor.value = throttle(descriptor.value, wait, options);
   return descriptor;
 };

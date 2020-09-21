@@ -3,26 +3,33 @@ import { Component as tsx } from "vue-tsx-support";
 import { VNode } from "vue";
 
 export interface FontIconsProps {
-    value: string;
+  value: string;
 }
 
 export interface FontIconsEvents {
-    onTap?: () => void
+  onTap?: () => void;
 }
 @Component
 export default class FontIcons extends tsx<FontIconsProps> {
-    @Prop() value: FontIconsProps["value"];
+  @Prop() value: FontIconsProps["value"];
 
+  @Emit("tap")
+  private handleTap() {
+    console.log("handleTap");
+  }
 
-    @Emit('tap')
-    private handleTap() {
-    }
-
-    protected render(): VNode {
-        return (
-            <v-touch tag="svg" class="icons" aria-hidden="true" onTap={() => { this.handleTap() }}>
-                <use xlinkHref={'#icon-' + this.value}></use>
-            </v-touch>
-        );
-    }
+  protected render(): VNode {
+    return (
+      <v-touch
+        tag="svg"
+        class="icons"
+        aria-hidden="true"
+        onTap={() => {
+          this.handleTap();
+        }}
+      >
+        <use xlinkHref={"#icon-" + this.value}></use>
+      </v-touch>
+    );
+  }
 }

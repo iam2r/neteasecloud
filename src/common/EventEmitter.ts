@@ -1,6 +1,6 @@
 export default class EventEmitter {
   private events = {};
-  public on<T extends Function>(name: string, fn: T) {
+  public on<T extends (...args: any[]) => void>(name: string, fn: T) {
     if (!this.events[name]) {
       this.events[name] = [];
     }
@@ -18,7 +18,7 @@ export default class EventEmitter {
     return this;
   }
 
-  public off<T extends Function>(name: string, fn?: T) {
+  public off<T extends (...args: any[]) => void>(name: string, fn?: T) {
     //fn  传空为解绑全部
     if (!this.events[name]) {
       return this;
@@ -32,7 +32,7 @@ export default class EventEmitter {
     return this;
   }
   // 单次绑定事件,执行完后解绑
-  public once<T extends Function>(name: string, fn: T) {
+  public once<T extends (...args: any[]) => void>(name: string, fn: T) {
     const only = (...args: any[]) => {
       fn(args);
       this.off(name, only);

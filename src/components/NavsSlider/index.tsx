@@ -34,10 +34,10 @@ export default class NavsSlider extends tsx<
   private set active(val: number) {
     this.$emit("change", val);
   }
-  private navLineScaleX: number = 1;
-  private navLineTransform: number = 0;
-  private navLineWidth: number = 0;
-  private navTransitionDuration: number = 0;
+  private navLineScaleX = 1;
+  private navLineTransform = 0;
+  private navLineWidth = 0;
+  private navTransitionDuration = 0;
   private scrollData: {
     tabTransform: number;
     navLineTransform: number;

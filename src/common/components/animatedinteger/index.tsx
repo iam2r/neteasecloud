@@ -23,7 +23,7 @@ export default class AnimatedInteger extends tsx<
   @Prop({ type: Number, required: true, default: 0 })
   value: AnimatedIntegerProps["value"];
   @Prop({ default: 0.5 }) time: AnimatedIntegerProps["time"];
-  private tweeningValue: number = 0;
+  private tweeningValue = 0;
   private tween: TweenMax;
   @Watch("value")
   onValueChange(newValue: number, oldValue: number) {

@@ -11,7 +11,7 @@ const preloading = new Preloading(2500);
 
 //下载合图等资源
 const loadingResources = () => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     //loadingImages
     await Promise.all(
       Object.values(resources.images).map(

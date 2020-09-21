@@ -73,11 +73,15 @@ export default class ScrollView extends tsx<
 
   @Debounce(300)
   @Emit("pullDown")
-  private onPullDown() {}
+  private onPullDown() {
+    console.log("pullDown");
+  }
 
   @Debounce(300)
   @Emit("pullUp")
-  private onPullUp() {}
+  private onPullUp() {
+    console.log("pullUp");
+  }
 
   @Emit("setTranslate")
   private onSetTranslate(translate: number) {

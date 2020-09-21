@@ -75,7 +75,7 @@ export default class MySwiper extends tsx<
     });
   }
 
-  protected beforeDestroy() {}
+  // protected beforeDestroy() {}
 
   @Emit("setTranslate")
   private onSetTranslate(translate: number) {
@@ -83,10 +83,14 @@ export default class MySwiper extends tsx<
   }
 
   @Emit("change")
-  private onSlideChangeTransitionEnd(active: number) {}
+  private onSlideChangeTransitionEnd(active: number) {
+    console.log(active);
+  }
 
   @Emit("change")
-  private onSlideChangeTransitionStart(active: number) {}
+  private onSlideChangeTransitionStart(active: number) {
+    console.log(active);
+  }
 
   public updateScroll() {
     if (this.options.loop) {

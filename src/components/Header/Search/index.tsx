@@ -32,10 +32,10 @@ interface PromisePools {
 
 @Component
 export default class Search extends tsx<any> {
-  private focus: boolean = false;
+  private focus = false;
   private pageStatus: SearchPageStatus = SearchPageStatus.DEFAULT;
 
-  private searchValue: string = "";
+  private searchValue = "";
   private searchAdvice: ResponseSearchAdvice["data"] = {
     showKeyword: "",
     realkeyword: "",
@@ -92,28 +92,29 @@ export default class Search extends tsx<any> {
     req.type = currentData.id;
     req.offset = (currentData.pagesCount - 1) * req.limit;
     this.promisePools.search = new Promise(async (reslove, reject) => {
-      const res = await (context.services.search(req) as any);
-      this.resultQuerying = -1;
-      this.resultNavs[currentActive].result =
-        currentData.key == "all"
-          ? res.result
-          : [
-              ...(currentData.result || []),
-              ...res.result[currentData.key],
-            ].reduce((pre, cur) => {
-              if (!~pre.findIndex((it) => it.id == cur.id)) {
-                pre.push(cur);
-              }
-              return pre;
-            }, []);
-      this.resultNavs[currentActive].hasMore = res.result.hasMore || false;
-      this.resultNavs[currentActive].pagesCount += this.resultNavs[
-        currentActive
-      ].hasMore
-        ? 1
-        : 0;
-      console.log(this.resultNavs[currentActive]);
-      reslove(res);
+      context.services.search(req).then((res: any) => {
+        this.resultQuerying = -1;
+        this.resultNavs[currentActive].result =
+          currentData.key == "all"
+            ? res.result
+            : [
+                ...(currentData.result || []),
+                ...res.result[currentData.key],
+              ].reduce((pre, cur) => {
+                if (!~pre.findIndex((it) => it.id == cur.id)) {
+                  pre.push(cur);
+                }
+                return pre;
+              }, []);
+        this.resultNavs[currentActive].hasMore = res.result.hasMore || false;
+        this.resultNavs[currentActive].pagesCount += this.resultNavs[
+          currentActive
+        ].hasMore
+          ? 1
+          : 0;
+        console.log(this.resultNavs[currentActive]);
+        reslove(res);
+      });
     });
     this.addHistory(req.keywords);
   }
@@ -195,7 +196,7 @@ export default class Search extends tsx<any> {
     };
   }
 
-  private historyCount: number = 1; //set时+1，确保get的更新。
+  private historyCount = 1; //set时+1，确保get的更新。
 
   private get historyList(): string[] {
     const result = getStore("search-history", "localStorage");
@@ -373,8 +374,8 @@ export default class Search extends tsx<any> {
   }
 
   //resultPage Data
-  private resultActive: number = 0;
-  private resultQuerying: number = -1;
+  private resultActive = 0;
+  private resultQuerying = -1;
   private resultNavs: {
     id: number;
     name: string;
@@ -492,7 +493,6 @@ export default class Search extends tsx<any> {
                       index
                     ].result.map(({ id }) => id);
                   }
-                } else {
                 }
               }}
             >
@@ -565,7 +565,6 @@ export default class Search extends tsx<any> {
                       } else {
                         this.resultNavs[index].checkList.push(id);
                       }
-                    } else {
                     }
                   }}
                 >

@@ -76,7 +76,7 @@ export const loadSound = (url: string) => {
   });
 };
 
-export const loadImage = (url: string, isBlob: boolean = false) => {
+export const loadImage = (url: string, isBlob = false) => {
   return new Promise((resolve, reject) => {
     if (isBlob) {
       const xhr = new XMLHttpRequest();
@@ -192,7 +192,7 @@ export const setStore = (
 export const getStore = (
   name: string,
   storage: "localStorage" | "sessionStorage" = "localStorage",
-  isJsonParse: boolean = false
+  isJsonParse = false
 ) => {
   if (!name) return;
   const item: any = window[storage].getItem(name);

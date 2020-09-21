@@ -83,7 +83,7 @@ export default class Animation<
     this.target = target;
   }
   private target: T = null;
-  private isAnimating: boolean = false;
+  private isAnimating = false;
   private getNow() {
     return window.performance &&
       window.performance.now &&
@@ -94,7 +94,7 @@ export default class Animation<
 
   private setTarget(callback: (key: string) => number) {
     for (const key in this.target) {
-      if (this.target.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(this.target, key)) {
         this.target[key] = callback(key) as any;
       }
     }

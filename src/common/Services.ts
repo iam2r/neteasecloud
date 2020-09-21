@@ -17,7 +17,7 @@ export class IError {
 
 export default class Service extends EventEmitter {
   public url: string;
-  protected timeout: number = 60000;
+  protected timeout = 60000;
 
   constructor(url?: string, timeout?: number) {
     super();

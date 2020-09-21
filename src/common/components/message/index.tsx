@@ -7,16 +7,18 @@ import "./styles.scss";
 export interface MessageOptions {
   autoClose?: number | false;
   content?: () => VNode;
-  onConfirm?: Function;
+  onConfirm?: (...args: any[]) => void;
 }
 
 @Component
 export default class Message extends tsx<any> {
   private options: MessageOptions = {
     content: this.defaultContent,
-    onConfirm: () => {},
+    onConfirm: () => {
+      console.log("confirm");
+    },
   };
-  private visible: boolean = false;
+  private visible = false;
   private timer: any;
   protected render() {
     return (

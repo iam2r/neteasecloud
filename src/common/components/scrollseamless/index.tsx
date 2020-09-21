@@ -3,10 +3,7 @@
  */
 import { Component, Prop } from "vue-property-decorator";
 import { Component as tsx } from "vue-tsx-support";
-import {
-  Swiper,
-  SwiperSlide,
-} from "vue-awesome-swiper";
+import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import { VNode } from "vue";
 import "./styles.scss";
 
@@ -43,7 +40,7 @@ export default class ScrollSeamless extends tsx<
   @Prop({ default: 1000 })
   private delay: ScrollSeamlessProps["delay"];
 
-  private paused: boolean = true;
+  private paused = true;
 
   private get swiper(): any {
     return (this.$refs.swiper as any).$swiper;

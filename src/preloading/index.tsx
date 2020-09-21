@@ -3,7 +3,7 @@ import context, { Events } from "@/context";
 import JSXUtils from "@/common/JSXUtils";
 
 export default class Preloading {
-  constructor(minVisibleTimes: number = 500) {
+  constructor(minVisibleTimes = 500) {
     this.minVisibleTimes = minVisibleTimes;
     this.init();
   }
@@ -22,7 +22,7 @@ export default class Preloading {
       );
   }
 
-  protected render(h: Function) {
+  protected render(h: any) {
     return (
       <div id="loading-box">
         <div class="main-content">
