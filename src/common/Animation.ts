@@ -138,3 +138,14 @@ export default class Animation<
     return this;
   }
 }
+
+document.querySelector("body").addEventListener("click", () => {
+  new Animation({
+    y: 100,
+  })
+    .to({ y: 0 }, 200)
+    .on("update", ({ y }) => {
+      console.log(y);
+      window.scrollTo(0, y);
+    });
+});

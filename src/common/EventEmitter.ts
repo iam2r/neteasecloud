@@ -14,7 +14,7 @@ export default class EventEmitter {
     }
     const fns = this.events[name];
     //不能直接遍历fns ,期间如果有off行为 会出问题
-    fns.map((fn) => fn).forEach((fn) => fn(args));
+    fns.map((fn) => fn).forEach((fn) => fn(...args));
     return this;
   }
 
@@ -34,7 +34,7 @@ export default class EventEmitter {
   // 单次绑定事件,执行完后解绑
   public once<T extends (...args: any[]) => void>(name: string, fn: T) {
     const only = (...args: any[]) => {
-      fn(args);
+      fn(...args);
       this.off(name, only);
     };
     this.on(name, only);
