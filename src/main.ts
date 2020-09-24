@@ -31,7 +31,7 @@ const loadingResources = () => {
 
 //下载js
 const loadingJs = () =>
-  import(/* webpackChunkName: "main-async" */ "@/main-async");
+  import(/* webpackChunkName: "main-async" */ "@/main-async"); //main-async下载完毕后，会用context.events.once(Events.Loaded)进行加载完毕事件的订阅
 
 Promise.all([
   loadingResources(),
