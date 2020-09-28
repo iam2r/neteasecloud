@@ -139,13 +139,15 @@ export default class Animation<
   }
 }
 
-document.querySelector("body").addEventListener("click", () => {
+const $body = document.querySelector("body");
+
+$body.addEventListener("click", () => {
   new Animation({
-    y: 100,
+    x: 0,
   })
-    .to({ y: 0 }, 200)
-    .on("update", ({ y }) => {
-      console.log(y);
-      window.scrollTo(0, y);
+    .to({ x: 360 }, 1000)
+    .on("update", ({ x }) => {
+      console.log(x);
+      $body.style.transform = `rotate(${x}deg)`;
     });
 });

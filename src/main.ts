@@ -4,7 +4,7 @@ import "@/styles/_adapter.scss";
 import context, { Events } from "@/context";
 import Preloading from "@/preloading";
 import resources, { Resource } from "@/resources";
-import { loadImage } from "@/common/Utils";
+import { loadImage } from "@/common/Utils"; //tree shaking
 
 //加载preloading组件
 const preloading = new Preloading(2500);

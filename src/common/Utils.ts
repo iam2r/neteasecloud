@@ -1,15 +1,14 @@
+export interface Script {
+  id: string;
+  src: string;
+  [key: string]: string;
+}
 export const loadScripts = async (
-  scripts:
-    | { id: string; src: string; [key: string]: string }
-    | { id: string; src: string; [key: string]: string }[],
+  scripts: Script | Script[],
   parallel = false
 ) => {
   scripts = Array.isArray(scripts) ? scripts : [scripts];
-  const loadScript = (script: {
-    id: string;
-    src: string;
-    [key: string]: string;
-  }) =>
+  const loadScript = (script: Script) =>
     new Promise((resolve, reject) => {
       const $script = document.createElement("script");
       const $fjs = document.querySelector("script");
