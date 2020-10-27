@@ -22,13 +22,18 @@ module.exports = {
   transpileDependencies: [/swiper/, /dom7/, /strip-ansi/], //IE11兼容，正则匹配强制走babel转换
 
   chainWebpack: (config) => {
+    //合图插件
     config
       .plugin("sprites")
       .use(require("webpack-spritesmith"), [require("./sprites.config")]);
+
+    //调试插件
     config.plugin("eruds").use(require("eruda-webpack-plugin"), [
       {
         entry: /app\.js$/,
       },
     ]);
+
+    config.module.rule("css-modules-typescript").test(/\.js$/);
   },
 };
